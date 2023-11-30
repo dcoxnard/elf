@@ -1,11 +1,20 @@
 # Import the Flask class
+import secrets
+
 from flask import Flask
+from flask_login import LoginManager
 
-# Create an instance of the Flask class
+
 app = Flask(__name__)
+app.secret_key = secrets.token_hex()
+login_manager = LoginManager(app)
 
 
-# Define a route and the associated function
+@login_manager.user_loader
+def load_user(user_id):
+    raise NotImplementedError  # return User.get(user_id)
+
+
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
