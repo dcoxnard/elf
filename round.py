@@ -51,8 +51,8 @@ class Round:
             user_names = list(partition.keys())
             pairs = make_pairs(user_names, partition)
             for left, right in pairs:
-                santa = [user for user in user if user.email == left][0]
-                recipient = [user for user in user if user.email == right][0]
+                santa = [user for user in users if user.email == left][0]
+                recipient = [user for user in users if user.email == right][0]
                 santa.recipient = recipient
                 session.add(santa)
             session.commit()

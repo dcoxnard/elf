@@ -2,8 +2,7 @@ from typing import Optional, List
 
 # Going to try the new-style SQLAlchemy ORM API
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, \
-    relationship, validates, Session
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
@@ -19,14 +18,8 @@ class User(Base):
     family: Mapped[str]
     image: Mapped[Optional[str]]
     recipient_email: Mapped[Optional[str]] = mapped_column(ForeignKey("user.email"))
-    recipient: Mapped[Optional["User"]] = relationship("User")
+    recipient: Mapped[Optional["User"]] = relationship("User", post_update=True)
     wishes: Mapped[List["Wish"]] = relationship()
-
-    @validates("recipient", include_backrefs=False)
-    def validate_one_recipient(self, key, recipient):
-        if recipient is not None and len(recipient) > 1:
-            raise ValueError("Failed validation of exactly one recipient")
-        return recipient
 
     def recipient_set(self):
         return self.recipient is not None
@@ -50,17 +43,3 @@ class Wish(Base):
     description: Mapped[str]
     link: Mapped[Optional[str]]
     user_email = mapped_column(ForeignKey("user.email"))
-
-
-# Quick test script
-# Insert 1x user with 1x wish
-# Script doesn't delete any existing DB automatically
-if __name__ == "__main__":
-    from db import engine
-    Base.metadata.create_all(engine)
-
-    with Session(engine) as session:
-        user = User(email="my_email", name="my_name", family="my_family")
-        user.wishes.append(Wish(description="my_wish", link="www.mylink.com"))
-        session.add(user)
-        session.commit()

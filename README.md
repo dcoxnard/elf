@@ -17,3 +17,13 @@ header, users = rows[0], rows[1:]
 round = Round()
 round.register_users(users)
 ```
+
+Sample util script for making pairs
+```
+python
+
+from round import Round
+
+round = Round()
+round.make_pairs()
+```
