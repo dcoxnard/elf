@@ -25,6 +25,7 @@ class Round:
     def register_users(self, users):
         """
         Initialize DB with user information
+
         :param users: List[Tuple[str, str] of emails and names
         :return: None
         """
@@ -39,9 +40,14 @@ class Round:
             session.commit()
 
     def make_pairs(self):
+        """
+        Generate a random pairing and persist it
+
+        :return: None
+        """
         with Session(self.engine) as session:
             users = session.query(User).all()
-            partition = [{user.email: user.family} for user in users]
+            partition = {user.email: user.family for user in users}
             user_names = list(partition.keys())
             pairs = make_pairs(user_names, partition)
             for left, right in pairs:
@@ -49,4 +55,13 @@ class Round:
                 recipient = [user for user in user if user.email == right][0]
                 santa.recipient = recipient
                 session.add(santa)
+            session.commit()
+
+    # TODO: Not sure about this function signature...
+    def record_wishes(self, user_email, *wishes):
+        with Session(self.engine) as session:
+            user = session.query(User.email == user_email).one()
+            for wish in wishes:
+                user.wishes.append(wish)
+            session.add(user)
             session.commit()

@@ -20,7 +20,7 @@ class User(Base):
     image: Mapped[Optional[str]]
     recipient_email: Mapped[Optional[str]] = mapped_column(ForeignKey("user.email"))
     recipient: Mapped[Optional["User"]] = relationship("User")
-    wishes: Mapped[Optional[List["Wish"]]] = relationship()
+    wishes: Mapped[List["Wish"]] = relationship()
 
     @validates("recipient", include_backrefs=False)
     def validate_one_recipient(self, key, recipient):
