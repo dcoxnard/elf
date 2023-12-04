@@ -16,6 +16,7 @@ class User(Base):
 
     email: Mapped[str] = mapped_column(primary_key=True)
     name: Mapped[str]
+    family: Mapped[str]
     image: Mapped[Optional[str]]
     recipient_email: Mapped[Optional[str]] = mapped_column(ForeignKey("user.email"))
     recipient: Mapped[Optional["User"]] = relationship("User")
@@ -38,7 +39,7 @@ class User(Base):
         return n
 
     def __repr__(self):
-        return f"User(email={self.email}, name={self.name}, recipient_set={self.recipient_set()}, n_wishes={self.n_wishes()})"
+        return f"User(email={self.email}, name={self.name}, family={self.family}, recipient_set={self.recipient_set()}, n_wishes={self.n_wishes()})"
 
 
 class Wish(Base):
@@ -59,7 +60,7 @@ if __name__ == "__main__":
     Base.metadata.create_all(engine)
 
     with Session(engine) as session:
-        user = User(email="my_email", name="my_name")
+        user = User(email="my_email", name="my_name", family="my_family")
         user.wishes.append(Wish(description="my_wish", link="www.mylink.com"))
         session.add(user)
         session.commit()

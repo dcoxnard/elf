@@ -1,3 +1,3 @@
-email,name
-alice@gmail.com,alice
-bob@gmail.com,bob
+email,name,family
+alice@gmail.com,alice,apple
+bob@gmail.com,bob,birne

@@ -10,7 +10,7 @@ from db import engine, db_path
 class Round:
 
     """
-    A class to model all of the actions taken in a round, including setup,
+    A class to model all the actions taken in a round, including setup,
     and to capture helpful metadata.
     """
 
@@ -29,13 +29,11 @@ class Round:
         :return: None
         """
 
-        if os.path.isfile(db_path):
-            raise RuntimeError(f"DB Already set up at {db_path}")
-
         commit_list = []
         with Session(self.engine) as session:
-            for email, name in users:
-                user = User(email=email, name=name)
+            for email, name, family in users:
+                # TODO: depends on correct ordering in input
+                user = User(email=email, name=name, family=family)
                 commit_list.append(user)
             session.add_all(commit_list)
             session.commit()
@@ -43,7 +41,9 @@ class Round:
     def make_pairs(self):
         with Session(self.engine) as session:
             users = session.query(User).all()
-            pairs = make_pairs(users)
+            partition = [{user.email: user.family} for user in users]
+            user_names = list(partition.keys())
+            pairs = make_pairs(user_names, partition)
             for left, right in pairs:
                 santa = [user for user in user if user.email == left][0]
                 recipient = [user for user in user if user.email == right][0]
