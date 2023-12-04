@@ -1,3 +1,5 @@
 from sqlalchemy import create_engine
 
-engine = create_engine("sqlite:///db.sqlite")
+db_path = "sqlite:///db.sqlite"
+
+engine = create_engine(db_path)
