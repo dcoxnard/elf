@@ -1,5 +1,6 @@
 # elf
 
+Sample util script for integration testing the registration of users
 ```
 rm db.sqlite
 python

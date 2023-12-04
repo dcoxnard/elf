@@ -18,6 +18,10 @@ def make_pairs(items: List, partition: Dict):
     # It may result in a "bipartite graph" ie where there are
     # e.g. 2+ "little" cycles rather than one "big" one
 
+    # Degenerate case
+    if len(items) == 0:
+        return []
+
     acc = []
 
     def go(a, b, inner=[]):
@@ -31,7 +35,7 @@ def make_pairs(items: List, partition: Dict):
         :return: None
         """
 
-        if len(inner) == 10:
+        if len(inner) == len(items):
             acc.append(inner)
             return
 
@@ -54,6 +58,11 @@ def make_pairs(items: List, partition: Dict):
     a = deepcopy(items)
     b = deepcopy(items)
     go(a, b)
+
+    if not acc:
+        raise RuntimeError("No pairings found")
+    elif len(acc) > 1:
+        raise RuntimeError(acc)
 
     # Put results in pair-order
     result = acc[0]

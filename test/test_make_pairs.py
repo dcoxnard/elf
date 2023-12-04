@@ -20,6 +20,21 @@ class TestMakeParis(unittest.TestCase):
         "15_item_case": {
             "items": [f"item{i}" for i in range(1, 16)],
             "partition": {f"item{i}": chr(64 + i) for i in range(1, 16)}
+        },
+        "realistic_case": {
+            "items": ["AA", "AB", "AC", "AD", "BA", "CA", "CB", "CC", "CD", "DA"],
+            "partition": {
+                "AA": "A",
+                "AB": "A",
+                "AC": "A",
+                "AD": "A",
+                "BA": "B",
+                "CA": "A",
+                "CB": "C",
+                "CC": "C",
+                "CD": "C",
+                "DA": "D"
+            }
         }
     }
 
@@ -60,7 +75,7 @@ class TestMakeParis(unittest.TestCase):
         """
         for case_name, args in self.cases.items():
             with self.subTest(case=case_name):
-                pairs = make_pairs(*args)
+                pairs = make_pairs(**args)
                 map_other = [left != right for left, right in pairs]
                 self.assertTrue(all(map_other))
 
@@ -71,7 +86,9 @@ class TestMakeParis(unittest.TestCase):
         for case_name, args in self.cases.items():
             with self.subTest(case=case_name):
                 p = args["partition"]
-                pairs = make_pairs(*args)
+                if case_name == "realistic_case":
+                    print("gggg")
+                pairs = make_pairs(**args)
                 mapped_partitions = [[p[lft], p[rt]] for lft, rt in pairs]
                 different_partition = [p1 != p2 for p1, p2 in mapped_partitions]
                 self.assertTrue(all(different_partition))
@@ -82,9 +99,9 @@ class TestMakeParis(unittest.TestCase):
         """
         for case_name, args in self.cases.items():
             with self.subTest(case=case_name):
-                pairs = make_pairs(*args)
+                pairs = make_pairs(**args)
                 lefts = sorted([pair[0] for pair in pairs])
-                self.assertEqual(lefts, args["items"])
+                self.assertEqual(lefts, sorted(args["items"]))
 
     def test_each_only_paired_once_right(self):
         """
@@ -92,6 +109,6 @@ class TestMakeParis(unittest.TestCase):
         """
         for case_name, args in self.cases.items():
             with self.subTest(case=case_name):
-                pairs = make_pairs(*args)
+                pairs = make_pairs(**args)
                 rights = sorted([pair[1] for pair in pairs])
-                self.assertEqual(rights, args["items"])
+                self.assertEqual(rights, sorted(args["items"]))
