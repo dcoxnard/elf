@@ -2,6 +2,7 @@ import os
 
 from sqlalchemy.orm import Session
 
+from make_pairs import make_pairs
 from models import User
 from db import engine, db_path
 
@@ -13,8 +14,9 @@ class Round:
     and to capture helpful metadata.
     """
 
+    engine = engine
+
     def __init__(self):
-        self.engine = engine
 
         if not os.path.isfile(db_path):
             from models import Base
@@ -36,4 +38,15 @@ class Round:
                 user = User(email=email, name=name)
                 commit_list.append(user)
             session.add_all(commit_list)
+            session.commit()
+
+    def make_pairs(self):
+        with Session(self.engine) as session:
+            users = session.query(User).all()
+            pairs = make_pairs(users)
+            for left, right in pairs:
+                santa = [user for user in user if user.email == left][0]
+                recipient = [user for user in user if user.email == right][0]
+                santa.recipient = recipient
+                session.add(santa)
             session.commit()
