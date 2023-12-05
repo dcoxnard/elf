@@ -41,13 +41,13 @@ def login():
     # branch on GET vs POST.  But not 100% sure.  Need to experiment
 
     if current_user.is_authenticated:
-        return redirect(url_for("index"))  # TODO: Create a template for index
+        return redirect(url_for("index"))
     form = LoginForm()
 
     if form.validate_on_submit():
         user_email = form.username.data
         password_data = form.password.data
-        remember = form.remember_me.data
+        remember = form.remember_me.data  # TODO: This doesn't do anything yet
 
         user = current_round.get_user(user_email)
         if not user.check_password(password_data):

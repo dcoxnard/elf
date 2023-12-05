@@ -1,6 +1,6 @@
 import os
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from make_pairs import make_pairs
 from models import User, Wish
@@ -76,6 +76,7 @@ class Round:
             user = (session
                     .query(User)
                     .where(User.email == user_email)
+                    .options(joinedload(User.wishes))
                     .one())
             return user
         #     user_dict = {
