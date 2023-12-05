@@ -59,14 +59,14 @@ class Round:
             session.commit()
 
     # TODO: Not sure about this function signature...
-    def record_wishes(self, user_email, *wishes):
+    def record_wishes(self, user_email, wishes, links):
         with Session(self.engine) as session:
             user = (session
                     .query(User)
                     .where(User.email == user_email)
                     .one())
-            for wish in wishes:
-                new_wish = Wish(description=wish)  # TODO: Also for option Wish.link
+            for wish, link in zip(wishes, links):
+                new_wish = Wish(description=wish, link=link)
                 user.wishes.append(new_wish)
             session.add(user)
             session.commit()

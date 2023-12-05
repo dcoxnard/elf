@@ -8,5 +8,24 @@
         {% endfor %}
     {% else %}
         <div><p>No wishes yet!</p></div>
+        <p>
+            {{ form.wish1.label }}<br>
+            {{ form.wish1(size=32) }}<br>
+            {{ form.link1.label }}<br>
+            {{ form.link1(size=32) }}
+        </p>
+        <p>
+            {{ form.wish2.label }}<br>
+            {{ form.wish2(size=32) }}<br>
+            {{ form.link2.label }}<br>
+            {{ form.link2(size=32) }}
+        </p>
+        <p>
+            {{ form.wish3.label }}<br>
+            {{ form.wish3(size=32) }}<br>
+            {{ form.link3.label }}<br>
+            {{ form.link3(size=32) }}
+        </p>
+        <p>{{ form.submit() }}</p>
     {% endif %}
 {% endblock %}

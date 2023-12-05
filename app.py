@@ -6,7 +6,7 @@ from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_login import LoginManager, current_user, login_user, logout_user, \
     login_required
 
-from forms import LoginForm
+from forms import LoginForm, WishesForm
 from round import Round
 
 app = Flask(__name__)
@@ -31,7 +31,23 @@ def hello_world():
 @app.route("/index")
 @login_required
 def index():
-    return render_template("index.html")
+    form = WishesForm()
+
+    if form.validate_on_submit():
+        wishes = [
+            form.wish1.data,
+            form.wish2.data,
+            form.wish3.data,
+        ]
+        links = [
+            form.link1.data,
+            form.link2.data,
+            form.link3.data,
+        ]
+        current_round.record_wishes(current_user.email, wishes, links)
+        # return redirect(url_for) ????
+
+    return render_template("index.html", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])

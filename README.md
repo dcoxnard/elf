@@ -35,7 +35,8 @@ python
 from round import Round
 round = Round()
 wishes = ["socks", "coal", "dentistry set"]
-round.record_wishes("alice@gmail.com", *wishes)
+links = [None, None, None]
+round.record_wishes("alice@gmail.com", wishes, links)
 ```
 
 Sample util script for getting user

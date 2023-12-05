@@ -11,6 +11,10 @@ class LoginForm(FlaskForm):
 
 
 class WishesForm(FlaskForm):
-    wish1 = StringField("Wish #1", validators=[DataRequired])
-    wish2 = StringField("Wish #2", validators=[DataRequired])
-    wish3 = StringField("Wish #3", validators=[DataRequired])
+    wish1 = StringField("Wish #1", validators=[DataRequired()])
+    link1 = StringField("Add Link (Optional)")
+    wish2 = StringField("Wish #2", validators=[DataRequired()])
+    link2 = StringField("Add Link (Optional)")
+    wish3 = StringField("Wish #3", validators=[DataRequired()])
+    link3 = StringField("Add Link (Optional)")
+    submit = SubmitField("Submit")
