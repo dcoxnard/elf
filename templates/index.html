@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Hi, {{ current_user.name }}!</h1>
-{% for wish in current_user.wishes %}
-<div><p>{{ current_user.name }} says: <b>{{ wish.description }}</b></p></div>
-{% endfor %}
+    <h1>Hi, {{ current_user.name }}!</h1>
+    {% if current_user.wishes %}
+        {% for wish in current_user.wishes %}
+        <div><p>{{ current_user.name }} says: <b>{{ wish.description }}</b></p></div>
+        {% endfor %}
+    {% else %}
+        <div><p>No wishes yet!</p></div>
+    {% endif %}
 {% endblock %}
