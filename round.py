@@ -3,7 +3,7 @@ import os
 from sqlalchemy.orm import Session
 
 from make_pairs import make_pairs
-from models import User
+from models import User, Wish
 from db import engine, db_path
 
 
@@ -60,8 +60,39 @@ class Round:
     # TODO: Not sure about this function signature...
     def record_wishes(self, user_email, *wishes):
         with Session(self.engine) as session:
-            user = session.query(User.email == user_email).one()
+            user = (session
+                    .query(User)
+                    .where(User.email == user_email)
+                    .one())
             for wish in wishes:
-                user.wishes.append(wish)
+                new_wish = Wish(description=wish)  # TODO: Also for option Wish.link
+                user.wishes.append(new_wish)
             session.add(user)
             session.commit()
+
+    def get_user(self, user_email):
+        with Session(self.engine) as session:
+            user = (session
+                    .query(User)
+                    .where(User.email == user_email)
+                    .one())
+            user_dict = {
+                "email": user.email,
+                "name": user.name,
+                "family": user.family,
+                "wishes": [(w.description, w.link) for w in user.wishes],
+            }
+            if user.recipient is not None:
+                recipient_details = {
+                    "recipient": user.recipient.name,
+                    "recipient_wishes": [
+                        (w.description, w.link) for w in user.recipient.wishes
+                    ],
+                }
+            else:
+                recipient_details = {
+                    "recipient": None,
+                    "recipient_wishes": None,
+                }
+            user_dict.update(recipient_details)
+        return user_dict

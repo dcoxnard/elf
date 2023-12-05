@@ -43,3 +43,5 @@ class Wish(Base):
     description: Mapped[str]
     link: Mapped[Optional[str]]
     user_email = mapped_column(ForeignKey("user.email"))
+
+    # TODO: def __repr__

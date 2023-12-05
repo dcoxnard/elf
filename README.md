@@ -27,3 +27,23 @@ from round import Round
 round = Round()
 round.make_pairs()
 ```
+
+Sample util script for recording wishes
+```
+python
+
+from round import Round
+round = Round()
+wishes = ["socks", "coal", "dentistry set"]
+round.record_wishes("alice@gmail.com", *wishes)
+```
+
+Sample util script for getting user
+```
+python 
+
+from round import Round
+round = Round()
+result = round.get_user("alice@gmail.com")
+print(result)
+```
