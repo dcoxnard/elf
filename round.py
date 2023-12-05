@@ -32,9 +32,10 @@ class Round:
 
         commit_list = []
         with Session(self.engine) as session:
-            for email, name, family in users:
+            for email, name, family, password in users:
                 # TODO: depends on correct ordering in input
                 user = User(email=email, name=name, family=family)
+                user.set_password(password)
                 commit_list.append(user)
             session.add_all(commit_list)
             session.commit()
@@ -76,23 +77,24 @@ class Round:
                     .query(User)
                     .where(User.email == user_email)
                     .one())
-            user_dict = {
-                "email": user.email,
-                "name": user.name,
-                "family": user.family,
-                "wishes": [(w.description, w.link) for w in user.wishes],
-            }
-            if user.recipient is not None:
-                recipient_details = {
-                    "recipient": user.recipient.name,
-                    "recipient_wishes": [
-                        (w.description, w.link) for w in user.recipient.wishes
-                    ],
-                }
-            else:
-                recipient_details = {
-                    "recipient": None,
-                    "recipient_wishes": None,
-                }
-            user_dict.update(recipient_details)
-        return user_dict
+            return user
+        #     user_dict = {
+        #         "email": user.email,
+        #         "name": user.name,
+        #         "family": user.family,
+        #         "wishes": [(w.description, w.link) for w in user.wishes],
+        #     }
+        #     if user.recipient is not None:
+        #         recipient_details = {
+        #             "recipient": user.recipient.name,
+        #             "recipient_wishes": [
+        #                 (w.description, w.link) for w in user.recipient.wishes
+        #             ],
+        #         }
+        #     else:
+        #         recipient_details = {
+        #             "recipient": None,
+        #             "recipient_wishes": None,
+        #         }
+        #     user_dict.update(recipient_details)
+        # return user_dict

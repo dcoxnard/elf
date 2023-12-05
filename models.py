@@ -3,13 +3,15 @@ from typing import Optional, List
 # Going to try the new-style SQLAlchemy ORM API
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 
 class Base(DeclarativeBase):
     pass
 
 
-class User(Base):
+class User(Base, UserMixin):
 
     __tablename__ = "user"
 
@@ -20,6 +22,7 @@ class User(Base):
     recipient_email: Mapped[Optional[str]] = mapped_column(ForeignKey("user.email"))
     recipient: Mapped[Optional["User"]] = relationship("User", post_update=True)
     wishes: Mapped[List["Wish"]] = relationship()
+    password_hash: Mapped[str]
 
     def recipient_set(self):
         return self.recipient is not None
@@ -30,6 +33,15 @@ class User(Base):
         else:
             n = len(self.wishes)
         return n
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def get_id(self):
+        return self.email
 
     def __repr__(self):
         return f"User(email={self.email}, name={self.name}, family={self.family}, recipient_set={self.recipient_set()}, n_wishes={self.n_wishes()})"
