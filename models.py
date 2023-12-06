@@ -23,6 +23,7 @@ class User(Base, UserMixin):
     recipient: Mapped[Optional["User"]] = relationship("User", post_update=True, lazy="joined", join_depth=2)
     wishes: Mapped[List["Wish"]] = relationship(lazy="joined")
     password_hash: Mapped[str]
+    user_has_set_own_password: Mapped[bool] = mapped_column(default=False)
 
     def recipient_set(self):
         return self.recipient is not None
@@ -36,6 +37,7 @@ class User(Base, UserMixin):
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
+        self.user_has_set_own_password = True
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)

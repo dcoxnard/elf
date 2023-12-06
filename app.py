@@ -6,8 +6,10 @@ from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_login import LoginManager, current_user, login_user, logout_user, \
     login_required
 
-from forms import LoginForm, WishesForm
+from forms import LoginForm, WishesForm, SetOwnPasswordForm, \
+    AccountRecoveryRequestForm, AccountRecoveryForm
 from round import Round
+from app_token import validate_token
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex()
@@ -24,8 +26,14 @@ def load_user(user_email):
 
 
 @app.route("/")
-def hello_world():
-    return "Hello, World!"
+def root():
+
+    if current_user.is_authenticated:
+        redirect_ = redirect(url_for("santa"))
+    else:
+        redirect_ = redirect(url_for("login"))
+
+    return redirect_
 
 
 @app.route("/index", methods=["GET", "POST"])
@@ -66,7 +74,7 @@ def login():
     if form.validate_on_submit():
         user_email = form.username.data
         password_data = form.password.data
-        remember = form.remember_me.data  # TODO: This doesn't do anything yet
+        remember = form.remember_me.data
 
         user = current_round.get_user(user_email)
         if not user.check_password(password_data):
@@ -84,10 +92,58 @@ def login():
     return render_template("login.html", title='Sign In', form=form)
 
 
+@app.route("/set_own_password", methods=["GET", "POST"])
+@login_required
+def set_own_password():
+
+    form = SetOwnPasswordForm()
+    if form.validate_on_submit():
+        password = form.new_password.data
+        current_user.set_password(password)
+        return redirect(url_for("santa"))
+
+    return render_template("set_own_password.html", form=form)
+
+
+# https://www.freecodecamp.org/news/setup-email-verification-in-flask-app/
+@app.route("/account_recovery_request", methods=["GET", "POST"])
+def account_recovery_request():
+
+    form = AccountRecoveryRequestForm()
+    if form.validate_on_submit():
+        # Send an email with a link to the recovery page
+        # Redirect to a template that says to check your email
+        raise NotImplementedError
+
+    return render_template("account_recovery_request.html", form=form)
+
+
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
+
+@app.route("confirm_email/<token>")
+def confirm_email(token):
+    if current_user.is_authenticated:
+        return redirect(url_for("santa"))
+
+    email = validate_token(token)
+    if email is False:
+        return redirect(url_for("login"))
+    else:
+        user = current_round.get_user(email)
+        login_user(user, remember=False)  # TODO: Add this to the form
+        return redirect(url_for("account_recovery"))
+
+
+@app.route("/account_recovery")
+@login_required
+def account_recovery():
+
+    form = AccountRecoveryForm()
+    return render_template("account_recovery.html", form=form)  # TODO: make this template
 
 
 @app.route("/santa")
