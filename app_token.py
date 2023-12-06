@@ -2,6 +2,8 @@ from itsdangerous import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature, SignatureExpired, BadTimeSignature
 
 
+# TODO: Obviously this needs to be improved
+# https://www.freecodecamp.org/news/setup-email-verification-in-flask-app/
 mock_secret_key = ":)"
 mock_salt = ":)"
 

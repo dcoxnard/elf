@@ -79,3 +79,13 @@ class Round:
                     .where(User.email == user_email)
                     .one())
             return user
+
+    def set_user_password(self, user_email, password):
+        with Session(self.engine) as session:
+            user = (session
+                    .query(User)
+                    .where(User.email == user_email)
+                    .one())
+            user.set_password(password)
+            session.add(user)
+            session.commit()

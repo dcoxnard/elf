@@ -27,7 +27,6 @@ def load_user(user_email):
 
 @app.route("/")
 def root():
-
     if current_user.is_authenticated:
         redirect_ = redirect(url_for("santa"))
     else:
@@ -36,9 +35,9 @@ def root():
     return redirect_
 
 
-@app.route("/index", methods=["GET", "POST"])
+@app.route("/wishes", methods=["GET", "POST"])
 @login_required
-def index():
+def wishes():
     if current_user.wishes:
         return redirect(url_for("santa"))
 
@@ -57,18 +56,17 @@ def index():
         ]
         current_round.record_wishes(current_user.email, wishes, links)
         return redirect(url_for("santa"))
+    # TODO: what happens when form is not validated?
 
-    return render_template("index.html", form=form)
+    return render_template("wishes.html", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
     # TODO: I don't like this fxn structure, seems to implicitly
     # branch on GET vs POST.  But not 100% sure.  Need to experiment
-
     if current_user.is_authenticated:
-        return redirect(url_for("index"))
+        return redirect(url_for("wishes"))
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -86,7 +84,7 @@ def login():
         # see also explanation at https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
         next_page = request.args.get("next")
         if next_page is None or urlsplit(next_page).netloc != "":
-            return redirect(url_for("index"))
+            return redirect(url_for("wishes"))
         return redirect(next_page)
 
     return render_template("login.html", title='Sign In', form=form)
@@ -95,11 +93,10 @@ def login():
 @app.route("/set_own_password", methods=["GET", "POST"])
 @login_required
 def set_own_password():
-
     form = SetOwnPasswordForm()
     if form.validate_on_submit():
         password = form.new_password.data
-        current_user.set_password(password)
+        current_round.set_user_password(current_user.email, password)
         return redirect(url_for("santa"))
 
     return render_template("set_own_password.html", form=form)
@@ -108,7 +105,6 @@ def set_own_password():
 # https://www.freecodecamp.org/news/setup-email-verification-in-flask-app/
 @app.route("/account_recovery_request", methods=["GET", "POST"])
 def account_recovery_request():
-
     form = AccountRecoveryRequestForm()
     if form.validate_on_submit():
         # Send an email with a link to the recovery page
@@ -121,10 +117,10 @@ def account_recovery_request():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("wishes"))
 
 
-@app.route("confirm_email/<token>")
+@app.route("/confirm_email/<token>")
 def confirm_email(token):
     if current_user.is_authenticated:
         return redirect(url_for("santa"))
@@ -134,26 +130,24 @@ def confirm_email(token):
         return redirect(url_for("login"))
     else:
         user = current_round.get_user(email)
-        login_user(user, remember=False)  # TODO: Add this to the form
+        login_user(user, remember=False)
         return redirect(url_for("account_recovery"))
 
 
 @app.route("/account_recovery")
 @login_required
 def account_recovery():
-
     form = AccountRecoveryForm()
-    return render_template("account_recovery.html", form=form)  # TODO: make this template
+    return render_template("account_recovery.html", form=form)
 
 
 @app.route("/santa")
 @login_required
 def santa():
-
     # You need to submit your wishes before you can see
     # whom you're paired with
     if not current_user.wishes:
-        return redirect(url_for("index"))
+        return redirect(url_for("wishes"))
 
     recipient = current_user.recipient
 
