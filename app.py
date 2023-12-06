@@ -12,7 +12,7 @@ from round import Round
 app = Flask(__name__)
 app.secret_key = secrets.token_hex()
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = "login"
 
 
 current_round = Round()
@@ -25,12 +25,15 @@ def load_user(user_email):
 
 @app.route("/")
 def hello_world():
-    return 'Hello, World!'
+    return "Hello, World!"
 
 
-@app.route("/index")
+@app.route("/index", methods=["GET", "POST"])
 @login_required
 def index():
+    if current_user.wishes:
+        return redirect(url_for("santa"))
+
     form = WishesForm()
 
     if form.validate_on_submit():
@@ -45,7 +48,7 @@ def index():
             form.link3.data,
         ]
         current_round.record_wishes(current_user.email, wishes, links)
-        # return redirect(url_for) ????
+        return redirect(url_for("santa"))
 
     return render_template("index.html", form=form)
 
@@ -85,6 +88,20 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
+
+@app.route("/santa")
+@login_required
+def santa():
+
+    # You need to submit your wishes before you can see
+    # whom you're paired with
+    if not current_user.wishes:
+        return redirect(url_for("index"))
+
+    recipient = current_user.recipient
+
+    return render_template("santa.html", user=current_user, recipient=recipient)
 
 
 # Run the application

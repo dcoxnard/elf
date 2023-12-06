@@ -20,8 +20,8 @@ class User(Base, UserMixin):
     family: Mapped[str]
     image: Mapped[Optional[str]]
     recipient_email: Mapped[Optional[str]] = mapped_column(ForeignKey("user.email"))
-    recipient: Mapped[Optional["User"]] = relationship("User", post_update=True)
-    wishes: Mapped[List["Wish"]] = relationship()
+    recipient: Mapped[Optional["User"]] = relationship("User", post_update=True, lazy="joined", join_depth=2)
+    wishes: Mapped[List["Wish"]] = relationship(lazy="joined")
     password_hash: Mapped[str]
 
     def recipient_set(self):

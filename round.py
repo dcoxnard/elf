@@ -71,31 +71,11 @@ class Round:
             session.add(user)
             session.commit()
 
+    # Eager load for flask-login
     def get_user(self, user_email):
         with Session(self.engine) as session:
             user = (session
                     .query(User)
                     .where(User.email == user_email)
-                    .options(joinedload(User.wishes))
                     .one())
             return user
-        #     user_dict = {
-        #         "email": user.email,
-        #         "name": user.name,
-        #         "family": user.family,
-        #         "wishes": [(w.description, w.link) for w in user.wishes],
-        #     }
-        #     if user.recipient is not None:
-        #         recipient_details = {
-        #             "recipient": user.recipient.name,
-        #             "recipient_wishes": [
-        #                 (w.description, w.link) for w in user.recipient.wishes
-        #             ],
-        #         }
-        #     else:
-        #         recipient_details = {
-        #             "recipient": None,
-        #             "recipient_wishes": None,
-        #         }
-        #     user_dict.update(recipient_details)
-        # return user_dict

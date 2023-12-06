@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi, {{ current_user.name }}!</h1>
+
+    <p>You are paired with {{ recipient.name }}</p>
+    {% if recipient.wishes %}
+    <p>Here are their three wishes:</p>
+        {% for wish in recipient.wishes %}
+        <div><p>{{ wish.description }} ({{ wish.link }})</b></p></div>
+        {% endfor %}
+    {% else %}
+    <p>They have not submitted their wishes yet!  Stay tuned...</p>
+    {% endif %}
+
+    <p>Here are the things you wished for:</p>
+        {% for wish in current_user.wishes %}
+            <div><p>{{ wish.description }} ({{ wish.link }})</b></p></div>
+        {% endfor %}
+
+
+{% endblock %}
