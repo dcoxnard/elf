@@ -109,6 +109,7 @@ def account_recovery_request():
     if form.validate_on_submit():
         # Send an email with a link to the recovery page
         # Redirect to a template that says to check your email
+        redirect(url_for("account_recovery"))
         raise NotImplementedError
 
     return render_template("account_recovery_request.html", form=form)
