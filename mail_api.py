@@ -4,6 +4,13 @@ from email.message import EmailMessage
 import google.auth
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from google.oauth2.credentials import Credentials
+
+
+SCOPES = [
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/gmail.send"
+]
 
 
 # https://developers.google.com/gmail/api/guides/sending#sending_messages
@@ -16,25 +23,27 @@ def gmail_send_message():
     TODO(developer) - See https://developers.google.com/identity
     for guides on implementing OAuth2 for the application.
     """
-    creds, _ = google.auth.default()
+    # creds, _ = google.auth.default()
+    creds = Credentials.from_authorized_user_file("token.json", SCOPES)
 
     try:
         service = build("gmail", "v1", credentials=creds)
         message = EmailMessage()
 
         content = """
-        This is automated draft mail
+        This is automated draft mail!
         """
         message.set_content(content)
 
         message["To"] = ""
         message["From"] = ""
-        message["Subject"] = ""
+        message["Subject"] = "Test!"
 
         # encoded message
         encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
 
         create_message = {"raw": encoded_message}
+        # noinspection PyInterpreter
         send_message = (service.users()
                         .messages()
                         .send(userId="me", body=create_message)
