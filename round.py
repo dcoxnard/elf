@@ -50,11 +50,15 @@ class Round:
         with Session(self.engine) as session:
             users = session.query(User).all()
             partition = {user.email: user.family for user in users}
+            previous_recipients = {user.email: user.previous_recipient_email for user in users}
             user_names = list(partition.keys())
-            pairs = make_pairs(user_names, partition)
+            pairs = make_pairs(user_names, partition, previous_recipients)
             for left, right in pairs:
+                # TODO: is it possible to just query the session itself?
                 santa = [user for user in users if user.email == left][0]
                 recipient = [user for user in users if user.email == right][0]
+                # TODO: This isn't working.  for some reason, the previous-recipient
+                # ends up overwriting the recipient in the DB.
                 santa.recipient = recipient
                 session.add(santa)
             session.commit()
@@ -90,3 +94,7 @@ class Round:
             user.set_password(password)
             session.add(user)
             session.commit()
+
+if __name__ == "__main__":
+    round = Round()
+    round.make_pairs()

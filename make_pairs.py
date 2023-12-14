@@ -3,13 +3,17 @@ import random
 from copy import deepcopy
 
 
-def make_pairs(items: List, partition: Dict):
+# TODO: would be more generalizable to just have the list of items,
+# and a map described what is not allowed to be allocated to what.
+# Levels of abstraction are getting mixed together with this.
+def make_pairs(items: List, partition: Dict, not_allowed_map: Dict):
     """
     Docstring here!
 
     :param items: List[item]
     :param partition: Dict[str: str] e.g. "bob" --> "smith"
         Maps each item to its group.
+    :param: not_allowed_map: Dict[str: str]
     :return: List[List[item, item]]
     """
     # This works!
@@ -47,7 +51,9 @@ def make_pairs(items: List, partition: Dict):
             random.shuffle(b)
             for aa in a:
                 for bb in b:
-                    if partition[aa] == partition[bb]:
+                    same_partition = partition[aa] == partition[bb]
+                    not_allowed = not_allowed_map.get(aa) == bb
+                    if same_partition or not_allowed:
                         continue
                     else:
                         new_a = [aaa for aaa in a if aaa != aa]

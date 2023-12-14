@@ -26,6 +26,8 @@ class User(Base, UserMixin):
                                                        lazy="joined",
                                                        join_depth=2)
     previous_recipient_email: Mapped[str] = mapped_column(ForeignKey("user.email"))
+    previous_recipient: Mapped[Optional["User"]] = relationship("User",
+                                                                foreign_keys=[previous_recipient_email])
     wishes: Mapped[List["Wish"]] = relationship(lazy="joined")
     password_hash: Mapped[str]
     user_has_set_own_password: Mapped[bool] = mapped_column(default=False)
