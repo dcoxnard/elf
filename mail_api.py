@@ -1,7 +1,7 @@
+import os
 import base64
 from email.message import EmailMessage
 
-import google.auth
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
@@ -11,6 +11,24 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/gmail.send"
 ]
+
+
+class MailApi:
+
+    creds = None
+    service = None
+
+    def send_test_email(self, from_, to):
+        raise NotImplementedError
+
+    def build_creds(self):
+        raise NotImplementedError
+
+    def initialize_service(self):
+        raise NotImplementedError
+
+    def send_email(self, from_, to_, subject_line, message_body):
+        raise NotImplementedError
 
 
 # https://developers.google.com/gmail/api/guides/sending#sending_messages
