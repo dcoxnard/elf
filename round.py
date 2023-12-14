@@ -32,10 +32,11 @@ class Round:
 
         commit_list = []
         with Session(self.engine) as session:
-            for email, name, family, password in users:
+            for email, name, family, password, previous_recipient_email in users:
                 # TODO: depends on correct ordering in input
-                user = User(email=email, name=name, family=family)
-                user.set_password(password)
+                user = User(email=email, name=name, family=family,
+                            previous_recipient_email=previous_recipient_email)
+                user.set_password(password, user_has_set=False)
                 commit_list.append(user)
             session.add_all(commit_list)
             session.commit()

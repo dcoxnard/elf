@@ -20,7 +20,12 @@ class User(Base, UserMixin):
     family: Mapped[str]
     image: Mapped[Optional[str]]
     recipient_email: Mapped[Optional[str]] = mapped_column(ForeignKey("user.email"))
-    recipient: Mapped[Optional["User"]] = relationship("User", post_update=True, lazy="joined", join_depth=2)
+    recipient: Mapped[Optional["User"]] = relationship("User",
+                                                       foreign_keys=[recipient_email],
+                                                       post_update=True,
+                                                       lazy="joined",
+                                                       join_depth=2)
+    previous_recipient_email: Mapped[str] = mapped_column(ForeignKey("user.email"))
     wishes: Mapped[List["Wish"]] = relationship(lazy="joined")
     password_hash: Mapped[str]
     user_has_set_own_password: Mapped[bool] = mapped_column(default=False)
@@ -35,9 +40,9 @@ class User(Base, UserMixin):
             n = len(self.wishes)
         return n
 
-    def set_password(self, password):
+    def set_password(self, password, user_has_set=True):
         self.password_hash = generate_password_hash(password)
-        self.user_has_set_own_password = True
+        self.user_has_set_own_password = user_has_set
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
