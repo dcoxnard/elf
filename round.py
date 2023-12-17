@@ -1,6 +1,6 @@
 import os
 
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 
 from make_pairs import make_pairs
 from models import User, Wish
@@ -30,15 +30,18 @@ class Round:
         :return: None
         """
 
-        commit_list = []
         with Session(self.engine) as session:
-            for email, name, family, password, previous_recipient_email in users:
+            for email, name, family, password, _ in users:
                 # TODO: depends on correct ordering in input
-                user = User(email=email, name=name, family=family,
-                            previous_recipient_email=previous_recipient_email)
+                user = User(email=email, name=name, family=family)
                 user.set_password(password, user_has_set=False)
-                commit_list.append(user)
-            session.add_all(commit_list)
+                session.add(user)
+            session.flush()
+            for email, _, _, _, previous_recipient_email in users:
+                left = session.query(User).where(User.email == email).one()
+                right = session.query(User).where(User.email == previous_recipient_email).one()
+                left.previous_recipient = right
+                session.add(left)
             session.commit()
 
     def make_pairs(self):
@@ -50,17 +53,12 @@ class Round:
         with Session(self.engine) as session:
             users = session.query(User).all()
             partition = {user.email: user.family for user in users}
-            previous_recipients = {user.email: user.previous_recipient_email for user in users}
+            previous_recipients = {user.email: user.previous_recipient.email for user in users}
             user_names = list(partition.keys())
             pairs = make_pairs(user_names, partition, previous_recipients)
             for left, right in pairs:
-                # TODO: is it possible to just query the session itself?
-                # santa = [user for user in users if user.email == left][0]
-                # recipient = [user for user in users if user.email == right][0]
                 santa = session.query(User).where(User.email == left).one()
                 recipient = session.query(User).where(User.email == right).one()
-                # TODO: This isn't working.  for some reason, the previous-recipient
-                # ends up overwriting the recipient in the DB.
                 santa.recipient = recipient
                 session.add(santa)
             session.commit()
@@ -96,8 +94,3 @@ class Round:
             user.set_password(password)
             session.add(user)
             session.commit()
-
-
-if __name__ == "__main__":
-    round = Round()
-    round.make_pairs()

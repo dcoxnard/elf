@@ -20,14 +20,22 @@ class User(Base, UserMixin):
     family: Mapped[str]
     image: Mapped[Optional[str]]
     recipient_email: Mapped[Optional[str]] = mapped_column(ForeignKey("user.email"))
-    recipient: Mapped[Optional["User"]] = relationship("User",
-                                                       foreign_keys=[recipient_email],
-                                                       post_update=True,
-                                                       lazy="joined",
-                                                       join_depth=2)
-    previous_recipient_email: Mapped[str] = mapped_column(ForeignKey("user.email"))
-    previous_recipient: Mapped[Optional["User"]] = relationship("User",
-                                                                foreign_keys=[previous_recipient_email])
+    recipient: Mapped[Optional["User"]] = relationship(
+        "User",
+        foreign_keys=[recipient_email],
+        post_update=True,
+        lazy="joined",
+        join_depth=2,
+        remote_side=[email]
+    )
+    previous_recipient_email: Mapped[Optional[str]] = mapped_column(ForeignKey("user.email"))
+    previous_recipient: Mapped[Optional["User"]] = relationship(
+        "User",
+        foreign_keys=[previous_recipient_email],
+        lazy="joined",
+        join_depth=2,
+        remote_side=[email]
+    )
     wishes: Mapped[List["Wish"]] = relationship(lazy="joined")
     password_hash: Mapped[str]
     user_has_set_own_password: Mapped[bool] = mapped_column(default=False)
@@ -66,4 +74,4 @@ class Wish(Base):
     user_email = mapped_column(ForeignKey("user.email"))
 
     def __repr__(self):
-        return f"User(description={self.description}, link={self.link}"
+        return f"Wish(description={self.description}, link={self.link}"
