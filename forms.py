@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import InputRequired, Email, URL, ValidationError
+from wtforms.validators import InputRequired, Email, URL, ValidationError, \
+    Optional
 
 
 def validate_password(form, field):
@@ -19,13 +20,13 @@ class LoginForm(FlaskForm):
 class WishesForm(FlaskForm):
 
     wish1 = StringField("Wish #1", validators=[InputRequired()])
-    link1 = StringField("Add Link (Optional)", validators=[URL()])
+    link1 = StringField("Add Link (Optional)", validators=[Optional(), URL()])
 
     wish2 = StringField("Wish #2", validators=[InputRequired()])
-    link2 = StringField("Add Link (Optional)", validators=[URL()])
+    link2 = StringField("Add Link (Optional)", validators=[Optional(), URL()])
 
     wish3 = StringField("Wish #3", validators=[InputRequired()])
-    link3 = StringField("Add Link (Optional)", validators=[URL()])
+    link3 = StringField("Add Link (Optional)", validators=[Optional(), URL()])
 
     submit = SubmitField("Submit")
 
