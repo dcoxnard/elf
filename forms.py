@@ -9,9 +9,15 @@ def validate_password(form, field):
         raise ValidationError("Passwords must match")
 
 
+def strip_text(form, field):
+    return field.strip()
+
+
 class LoginForm(FlaskForm):
 
-    username = StringField("Username", validators=[Email()])
+    username = StringField("Username",
+                           validators=[Email()],
+                           filters=[strip_text])
     password = PasswordField("Password", validators=[InputRequired()])
     remember_me = BooleanField("Remember Me")
     submit = SubmitField("Sign In")
@@ -36,22 +42,34 @@ class WishesForm(FlaskForm):
 # for a new round
 class SetOwnPasswordForm(FlaskForm):
 
-    previous_password = StringField("Previous Password", validators=[InputRequired()])
-    new_password = StringField("New Password", validators=[InputRequired(), validate_password])
-    new_password2 = StringField("Confirm New Password", validators=[InputRequired()])
+    previous_password = StringField("Previous Password",
+                                    validators=[InputRequired()],
+                                    filters=[strip_text])
+    new_password = StringField("New Password",
+                               validators=[InputRequired(), validate_password],
+                               filters=[strip_text])
+    new_password2 = StringField("Confirm New Password",
+                                validators=[InputRequired()],
+                                filters=[strip_text])
     submit = SubmitField("Submit")
 
 
 # User does not know password
 class AccountRecoveryRequestForm(FlaskForm):
 
-    email = StringField("Your Email Address", validators=[Email()])
+    email = StringField("Your Email Address",
+                        validators=[Email()],
+                        filters=[strip_text])
     submit = SubmitField("Submit")
 
 
 # User resets PW, after authenticating via email link
 class AccountRecoveryForm(FlaskForm):
 
-    new_password = StringField("New Password", validators=[InputRequired(), validate_password])
-    new_password2 = StringField("Confirm New Password", validators=[InputRequired()])
+    new_password = StringField("New Password",
+                               validators=[InputRequired(), validate_password],
+                               filters=[strip_text])
+    new_password2 = StringField("Confirm New Password",
+                                validators=[InputRequired()],
+                                filters=[strip_text])
     submit = SubmitField("Submit")
