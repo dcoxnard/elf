@@ -31,8 +31,9 @@ class Round:
         """
 
         with Session(self.engine) as session:
+            # TODO: depends on correct ordering in input
             for email, name, family, password, _ in users:
-                # TODO: depends on correct ordering in input
+                email = email.lower()
                 user = User(email=email, name=name, family=family)
                 user.set_password(password, user_has_set=False)
                 session.add(user)
