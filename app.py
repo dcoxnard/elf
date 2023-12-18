@@ -1,4 +1,3 @@
-# Import the Flask class
 import secrets
 from urllib.parse import urlsplit
 
@@ -56,7 +55,6 @@ def wishes():
         ]
         current_round.record_wishes(current_user.email, wishes, links)
         return redirect(url_for("santa"))
-    # TODO: what happens when form is not validated?
 
     return render_template("wishes.html", form=form)
 
@@ -80,7 +78,7 @@ def login():
             return redirect(url_for("login"))
 
         login_user(user, remember=remember)
-        # TODO: Look into https://flask-login.readthedocs.io/en/latest/#configuring-your-application
+        # Look into https://flask-login.readthedocs.io/en/latest/#configuring-your-application
         # see also explanation at https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
         next_page = request.args.get("next")
         if next_page is None or urlsplit(next_page).netloc != "":
@@ -107,7 +105,7 @@ def set_own_password():
 def account_recovery_request():
     form = AccountRecoveryRequestForm()
     if form.validate_on_submit():
-        # Send an email with a link to the recovery page
+        # TODO: Send an email with a link to the recovery page
         # Redirect to a template that says to check your email
         redirect(url_for("account_recovery"))
         raise NotImplementedError
@@ -145,8 +143,7 @@ def account_recovery():
 @app.route("/santa")
 @login_required
 def santa():
-    # You need to submit your wishes before you can see
-    # whom you're paired with
+    # You need to submit your wishes before you can see whom you're paired with
     if not current_user.wishes:
         return redirect(url_for("wishes"))
 
