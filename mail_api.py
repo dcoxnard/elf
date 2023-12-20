@@ -5,6 +5,8 @@ from email.message import EmailMessage
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 
 SCOPES = [
@@ -16,19 +18,42 @@ SCOPES = [
 class MailApi:
 
     creds = None
-    service = None
-
-    def send_test_email(self, from_, to):
-        raise NotImplementedError
 
     def build_creds(self):
-        raise NotImplementedError
-
-    def initialize_service(self):
-        raise NotImplementedError
+        if os.path.exists("token.json"):
+            self.creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+        if not self.creds or not self.creds.valid:
+            if self.creds and self.creds.expired and self.creds.refresh_token:
+                self.creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    "credentials.json", SCOPES
+                )
+                self.creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open("token.json", "w") as token:
+                token.write(self.creds.to_json())
 
     def send_email(self, from_, to_, subject_line, message_body):
-        raise NotImplementedError
+        service = build("gmail", "v1", credentials=self.creds)
+
+        message = EmailMessage()
+
+        message.set_content(message_body)
+        message["To"] = to_
+        message["From"] = from_
+        message["Subject"] = subject_line
+
+        # encoded message
+        encoded_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
+
+        create_message = {"raw": encoded_message}
+        # noinspection PyInterpreter
+        send_message = (service.users()
+                        .messages()
+                        .send(userId="me", body=create_message)
+                        .execute())
+        return send_message
 
 
 # https://developers.google.com/gmail/api/guides/sending#sending_messages
@@ -41,7 +66,7 @@ def gmail_send_message():
     TODO(developer) - See https://developers.google.com/identity
     for guides on implementing OAuth2 for the application.
     """
-    # creds, _ = google.auth.default()
+    # self.creds, _ = google.auth.default()
     creds = Credentials.from_authorized_user_file("token.json", SCOPES)
 
     try:
