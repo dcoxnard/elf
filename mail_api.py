@@ -35,6 +35,8 @@ class MailApi:
                 token.write(self.creds.to_json())
 
     def send_email(self, from_, to_, subject_line, message_body):
+        self.build_creds()
+
         service = build("gmail", "v1", credentials=self.creds)
 
         message = EmailMessage()
