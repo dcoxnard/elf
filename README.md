@@ -51,7 +51,8 @@ print(result)
 
 ## TODO
 - Only one item is mandatory; all links are mandatory
-- Looser link validation
+- Helpful text for form elements
+- Helpful message when form validation fails
 - Revisit first-time PW setting, I don't think it's working
 - Function to send a mail blast with temp credentials
 - Function to send email reminder to fill out your stuff

@@ -28,10 +28,10 @@ class WishesForm(FlaskForm):
     wish1 = StringField("Wish #1", validators=[InputRequired()])
     link1 = StringField("Add Link (Optional)", validators=[Optional(), URL()])
 
-    wish2 = StringField("Wish #2", validators=[InputRequired()])
+    wish2 = StringField("Wish #2", validators=[Optional()])
     link2 = StringField("Add Link (Optional)", validators=[Optional(), URL()])
 
-    wish3 = StringField("Wish #3", validators=[InputRequired()])
+    wish3 = StringField("Wish #3", validators=[Optional()])
     link3 = StringField("Add Link (Optional)", validators=[Optional(), URL()])
 
     submit = SubmitField("Submit")
