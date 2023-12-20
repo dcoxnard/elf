@@ -50,12 +50,10 @@ print(result)
 ```
 
 ## TODO
-- Hide PW text, with optional show button
 - Helpful text for form elements
 - Helpful message when form validation fails
-- Function to send a mail blast with temp credentials
-- Function to send email reminder to fill out your stuff
-- Function to send an account recovery PW
+- Send temp credentials with account recovery emailer
+- Shape up the email message templates
 - Implement account recovery endpoint
 - `is_admin` in data model
 - admin-only endpoint to send a beginning-of-round email blast
@@ -65,3 +63,4 @@ print(result)
 - Logout button
 - Navigation
 - Logging
+- Optional show button for PW

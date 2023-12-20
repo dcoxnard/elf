@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from make_pairs import make_pairs
 from models import User, Wish
 from db import engine, db_path
+from mail_api import MailApi
 import messages
 
 
@@ -98,12 +99,17 @@ class Round:
             session.add(user)
             session.commit()
 
-    def send_email(self, user_email, message):
-        raise NotImplementedError
+    @staticmethod
+    def send_email(user_email, subject_line, message):
+        mailer = MailApi()
+        from_ = ""
+        mailer.send_email(from_=from_, to_=user_email,
+                          subject_line=subject_line, message_body=message)
 
     def send_kickoff_email(self, user_email):
         # TODO: This needs to include temp credentials
-        self.send_email(user_email, messages.kickoff_message)
+        self.send_email(user_email, messages.kickoff_subject_line,
+                        messages.kickoff_message)
 
     def send_all_kickoff_email(self):
         with Session(self.engine) as session:
@@ -115,13 +121,16 @@ class Round:
                 self.send_kickoff_email(email)
 
     def send_reminder_email(self, user_email):
-        self.send_email(user_email, messages.reminder_message)
+        self.send_email(user_email, messages.reminder_subject_line,
+                        messages.reminder_message)
 
     def send_all_reminder_email(self):
         with Session(self.engine) as session:
             users = (session
                      .query(User)
                      .all())
-            for user in users:
+            # This could be done in the qry itself, but doesn't make a big diff
+            remind_users = [u for u in users if u.n_wishes() > 0]
+            for user in remind_users:
                 email = user.email
                 self.send_reminder_email(email)
