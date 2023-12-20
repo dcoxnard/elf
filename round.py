@@ -36,7 +36,11 @@ class Round:
             # TODO: depends on correct ordering in input
             for email, name, family, password, _ in users:
                 email = email.lower()
-                user = User(email=email, name=name, family=family)
+                if email == ADMIN_ADDR:
+                    user = User(email=email, name=name, family=family,
+                                is_admin=True)
+                else:
+                    user = User(email=email, name=name, family=family)
                 user.set_password(password, user_has_set=False)
                 session.add(user)
             session.flush()

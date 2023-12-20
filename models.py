@@ -39,6 +39,7 @@ class User(Base, UserMixin):
     wishes: Mapped[List["Wish"]] = relationship(lazy="joined")
     password_hash: Mapped[str]
     user_has_set_own_password: Mapped[bool] = mapped_column(default=False)
+    is_admin: Mapped[bool] = mapped_column(default=False)
 
     def recipient_set(self):
         return self.recipient is not None

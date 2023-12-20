@@ -55,7 +55,6 @@ print(result)
 - Send temp credentials with account recovery emailer
 - Shape up the email message templates
 - Implement account recovery endpoint
-- `is_admin` in data model
 - admin-only endpoint to send a beginning-of-round email blast
 - admin-only functionality to (re-)initialize, using previous recipients
 - admin-only functionality to export pairs after the round is over
