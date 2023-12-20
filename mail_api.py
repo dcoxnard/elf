@@ -13,6 +13,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/gmail.send"
 ]
+ADMIN_ADDR = os.environ["ADMIN_ADDR"]
 
 
 class MailApi:

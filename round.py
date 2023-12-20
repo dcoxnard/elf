@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from make_pairs import make_pairs
 from models import User, Wish
 from db import engine, db_path
-from mail_api import MailApi
+from mail_api import MailApi, ADMIN_ADDR
 import messages
 
 
@@ -102,7 +102,7 @@ class Round:
     @staticmethod
     def send_email(user_email, subject_line, message):
         mailer = MailApi()
-        from_ = ""
+        from_ = ADMIN_ADDR
         mailer.send_email(from_=from_, to_=user_email,
                           subject_line=subject_line, message_body=message)
 
