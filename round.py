@@ -72,8 +72,9 @@ class Round:
                     .where(User.email == user_email)
                     .one())
             for wish, link in zip(wishes, links):
-                new_wish = Wish(description=wish, link=link)
-                user.wishes.append(new_wish)
+                if wish or link:
+                    new_wish = Wish(description=wish, link=link)
+                    user.wishes.append(new_wish)
             session.add(user)
             session.commit()
 
