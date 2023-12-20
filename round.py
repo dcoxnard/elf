@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from make_pairs import make_pairs
 from models import User, Wish
 from db import engine, db_path
+import messages
 
 
 class Round:
@@ -96,3 +97,31 @@ class Round:
             user.set_password(password)
             session.add(user)
             session.commit()
+
+    def send_email(self, user_email, message):
+        raise NotImplementedError
+
+    def send_kickoff_email(self, user_email):
+        # TODO: This needs to include temp credentials
+        self.send_email(user_email, messages.kickoff_message)
+
+    def send_all_kickoff_email(self):
+        with Session(self.engine) as session:
+            users = (session
+                     .query(User)
+                     .all())
+            for user in users:
+                email = user.email
+                self.send_kickoff_email(email)
+
+    def send_reminder_email(self, user_email):
+        self.send_email(user_email, messages.reminder_message)
+
+    def send_all_reminder_email(self):
+        with Session(self.engine) as session:
+            users = (session
+                     .query(User)
+                     .all())
+            for user in users:
+                email = user.email
+                self.send_reminder_email(email)

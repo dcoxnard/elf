@@ -64,3 +64,4 @@ print(result)
 - Styling
 - Logout button
 - Navigation
+- Logging
