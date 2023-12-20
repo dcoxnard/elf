@@ -50,10 +50,9 @@ print(result)
 ```
 
 ## TODO
-- Only one item is mandatory; all links are mandatory
+- Hide PW text, with optional show button
 - Helpful text for form elements
 - Helpful message when form validation fails
-- Revisit first-time PW setting, I don't think it's working
 - Function to send a mail blast with temp credentials
 - Function to send email reminder to fill out your stuff
 - Function to send an account recovery PW
@@ -63,3 +62,5 @@ print(result)
 - admin-only functionality to (re-)initialize, using previous recipients
 - admin-only functionality to esport pairs after the round is over
 - Styling
+- Logout button
+- Navigation

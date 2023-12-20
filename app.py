@@ -72,12 +72,18 @@ def login():
         password_data = form.password.data
         remember = form.remember_me.data
 
+        # TODO: can this be `current_user`?
         user = current_round.get_user(user_email)
         if not user.check_password(password_data):
             flash("Invalid username or password!")
             return redirect(url_for("login"))
 
         login_user(user, remember=remember)
+
+        # Force first-time redirect to set own PW
+        if not user.user_has_set_own_password:
+            return redirect(url_for("account_recovery"))
+
         # Look into https://flask-login.readthedocs.io/en/latest/#configuring-your-application
         # see also explanation at https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
         next_page = request.args.get("next")
@@ -133,10 +139,18 @@ def confirm_email(token):
         return redirect(url_for("account_recovery"))
 
 
-@app.route("/account_recovery")
+@app.route("/account_recovery", methods=["GET", "POST"])
 @login_required
 def account_recovery():
     form = AccountRecoveryForm()
+
+    # Collect form info, validate, set PW, and move on to santa
+    if form.validate_on_submit():
+        password1 = form.new_password.data
+        password2 = form.new_password2.data
+        current_round.set_user_password(current_user.email, password1)
+        return redirect(url_for("santa"))
+
     return render_template("account_recovery.html", form=form)
 
 

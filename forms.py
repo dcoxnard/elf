@@ -9,8 +9,9 @@ def validate_password(form, field):
         raise ValidationError("Passwords must match")
 
 
-def strip_text(form, field):
-    return field.strip()
+def strip_text(field):
+    if isinstance(field, str):
+        return field.strip()
 
 
 class LoginForm(FlaskForm):
@@ -67,9 +68,9 @@ class AccountRecoveryRequestForm(FlaskForm):
 class AccountRecoveryForm(FlaskForm):
 
     new_password = StringField("New Password",
-                               validators=[InputRequired(), validate_password],
+                               validators=[InputRequired()],
                                filters=[strip_text])
     new_password2 = StringField("Confirm New Password",
-                                validators=[InputRequired()],
+                                validators=[InputRequired(), validate_password],
                                 filters=[strip_text])
     submit = SubmitField("Submit")
