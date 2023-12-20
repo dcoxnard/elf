@@ -43,15 +43,15 @@ class WishesForm(FlaskForm):
 # for a new round
 class SetOwnPasswordForm(FlaskForm):
 
-    previous_password = StringField("Previous Password",
-                                    validators=[InputRequired()],
-                                    filters=[strip_text])
-    new_password = StringField("New Password",
-                               validators=[InputRequired(), validate_password],
-                               filters=[strip_text])
-    new_password2 = StringField("Confirm New Password",
-                                validators=[InputRequired()],
-                                filters=[strip_text])
+    previous_password = PasswordField("Previous Password",
+                                      validators=[InputRequired()],
+                                      filters=[strip_text])
+    new_password = PasswordField("New Password",
+                                 validators=[InputRequired(), validate_password],
+                                 filters=[strip_text])
+    new_password2 = PasswordField("Confirm New Password",
+                                  validators=[InputRequired()],
+                                  filters=[strip_text])
     submit = SubmitField("Submit")
 
 
@@ -67,10 +67,10 @@ class AccountRecoveryRequestForm(FlaskForm):
 # User resets PW, after authenticating via email link
 class AccountRecoveryForm(FlaskForm):
 
-    new_password = StringField("New Password",
-                               validators=[InputRequired()],
-                               filters=[strip_text])
-    new_password2 = StringField("Confirm New Password",
-                                validators=[InputRequired(), validate_password],
-                                filters=[strip_text])
+    new_password = PasswordField("New Password",
+                                 validators=[InputRequired()],
+                                 filters=[strip_text])
+    new_password2 = PasswordField("Confirm New Password",
+                                  validators=[InputRequired(), validate_password],
+                                  filters=[strip_text])
     submit = SubmitField("Submit")

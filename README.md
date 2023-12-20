@@ -60,7 +60,7 @@ print(result)
 - `is_admin` in data model
 - admin-only endpoint to send a beginning-of-round email blast
 - admin-only functionality to (re-)initialize, using previous recipients
-- admin-only functionality to esport pairs after the round is over
+- admin-only functionality to export pairs after the round is over
 - Styling
 - Logout button
 - Navigation
