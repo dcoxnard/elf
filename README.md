@@ -48,3 +48,17 @@ round = Round()
 result = round.get_user("alice@gmail.com")
 print(result)
 ```
+
+## TODO
+- Only one item is mandatory; all links are mandatory
+- Looser link validation
+- Revisit first-time PW setting, I don't think it's working
+- Function to send a mail blast with temp credentials
+- Function to send email reminder to fill out your stuff
+- Function to send an account recovery PW
+- Implement account recovery endpoint
+- `is_admin` in data model
+- admin-only endpoint to send a beginning-of-round email blast
+- admin-only functionality to (re-)initialize, using previous recipients
+- admin-only functionality to esport pairs after the round is over
+- Styling
