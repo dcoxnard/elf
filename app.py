@@ -1,4 +1,3 @@
-import secrets
 from urllib.parse import urlsplit
 
 from flask import Flask, render_template, redirect, url_for, flash, request
@@ -8,10 +7,12 @@ from flask_login import LoginManager, current_user, login_user, logout_user, \
 from forms import LoginForm, WishesForm, SetOwnPasswordForm, \
     AccountRecoveryRequestForm, AccountRecoveryForm
 from round import Round
-from app_token import validate_token
+from app_token import secret_key, validate_token
 
 app = Flask(__name__)
-app.secret_key = secrets.token_hex()
+
+app.secret_key = secret_key
+
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
