@@ -112,10 +112,12 @@ def set_own_password():
 def account_recovery_request():
     form = AccountRecoveryRequestForm()
     if form.validate_on_submit():
-        # TODO: Send an email with a link to the recovery page
-        # Redirect to a template that says to check your email
-        redirect(url_for("account_recovery"))
-        raise NotImplementedError
+
+        email = form.email.data
+        current_round.send_recovery_email(email)
+
+        # TODO: Implement this template
+        render_template("account_recovery_direction.html")
 
     return render_template("account_recovery_request.html", form=form)
 

@@ -140,3 +140,9 @@ class Round:
             for user in remind_users:
                 email = user.email
                 self.send_reminder_email(email)
+
+    def send_recovery_email(self, user_email):
+        token = generate_token(user_email)
+        recovery_message = messages.account_recovery_message.format(token=token)
+        self.send_email(user_email, messages.account_recovery_subject_line,
+                        recovery_message)

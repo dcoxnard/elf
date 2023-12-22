@@ -53,9 +53,7 @@ print(result)
 - Helpful text for form elements
 - Helpful message when form validation fails
 - Test: that kickoff emailer works with temp token sent
-- Send temp credentials with account recovery emailer
 - Shape up the email message templates
-- Implement account recovery endpoint
 - admin-only endpoint to send a beginning-of-round email blast
 - admin-only functionality to (re-)initialize, using previous recipients
 - admin-only functionality to export pairs after the round is over

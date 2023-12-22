@@ -13,4 +13,6 @@ This is the reminder message!
 account_recovery_subject_line = "Recover your account!"
 account_recovery_message = """
 This is the account recovery message!
+
+Please visit this address to reset your password: localhost:5000/confirm_email/{token:s}
 """.strip()
