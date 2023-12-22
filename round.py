@@ -7,6 +7,7 @@ from models import User, Wish
 from db import engine, db_path
 from mail_api import MailApi, ADMIN_ADDR
 import messages
+from app_token import generate_token
 
 
 class Round:
@@ -110,10 +111,10 @@ class Round:
         mailer.send_email(from_=from_, to_=user_email,
                           subject_line=subject_line, message_body=message)
 
-    def send_kickoff_email(self, user_email):
-        # TODO: This needs to include temp credentials
+    def send_kickoff_email(self, user_email, token):
+        kickoff_message = messages.kickoff_message.format(token=token)
         self.send_email(user_email, messages.kickoff_subject_line,
-                        messages.kickoff_message)
+                        kickoff_message)
 
     def send_all_kickoff_email(self):
         with Session(self.engine) as session:
@@ -122,7 +123,8 @@ class Round:
                      .all())
             for user in users:
                 email = user.email
-                self.send_kickoff_email(email)
+                token = generate_token(email)
+                self.send_kickoff_email(email, token)
 
     def send_reminder_email(self, user_email):
         self.send_email(user_email, messages.reminder_subject_line,

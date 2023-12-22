@@ -1,6 +1,8 @@
 kickoff_subject_line = "Kicking things off!"
 kickoff_message = """
 This is the kickoff message!
+
+Please log in using this link: localhost:5000/confirm_email/{token:s}
 """.strip()
 
 reminder_subject_line = "Reminding you!"
