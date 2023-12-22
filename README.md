@@ -50,7 +50,6 @@ print(result)
 ```
 
 ## TODO
-- Secret key stored in DB on round creation
 - Helpful text for form elements
 - Helpful message when form validation fails
 - Send temp credentials with account recovery emailer
