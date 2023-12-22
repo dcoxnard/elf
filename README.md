@@ -52,6 +52,7 @@ print(result)
 ## TODO
 - Helpful text for form elements
 - Helpful message when form validation fails
+- Test: that kickoff emailer works with temp token sent
 - Send temp credentials with account recovery emailer
 - Shape up the email message templates
 - Implement account recovery endpoint
