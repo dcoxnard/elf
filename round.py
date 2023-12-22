@@ -136,7 +136,7 @@ class Round:
                      .query(User)
                      .all())
             # This could be done in the qry itself, but doesn't make a big diff
-            remind_users = [u for u in users if u.n_wishes() > 0]
+            remind_users = [u for u in users if u.n_wishes() == 0]
             for user in remind_users:
                 email = user.email
                 self.send_reminder_email(email)
