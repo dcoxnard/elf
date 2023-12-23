@@ -176,17 +176,36 @@ class Round:
         self.send_email(user_email, messages.account_recovery_subject_line,
                         recovery_message)
 
+    def status(self):
+        with Session(self.engine) as session:
+            users = (session
+                     .query(User)
+                     .all())
+            status_data = dict()
+            for user in users:
+                user_data = dict()
+                for attr in [
+                    "name",
+                    "user_has_set_own_password",
+                ]:
+                    user_data[attr] = getattr(user, attr)
+                for method in [
+                    "recipient_set",
+                    "n_wishes",
+                ]:
+                    user_data[method] = getattr(user, method).__call__()
+                status_data[user.email] = user_data
+        return status_data
+
 
 if __name__ == "__main__":
     round = Round()
 
-    # import csv
+    import csv
 
-    # with open("sample_users.csv", "r") as f_obj:
-    #     reader = csv.reader(f_obj)
-    #     rows = [row for row in reader]
-    #
-    # header, users = rows[0], rows[1:]
-    # round.register_users(users)
+    with open("sample_users.csv", "r") as f_obj:
+        reader = csv.reader(f_obj)
+        rows = [row for row in reader]
 
-    round.send_all_reminder_email()
+    header, users = rows[0], rows[1:]
+    round.register_users(users)

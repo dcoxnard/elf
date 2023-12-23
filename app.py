@@ -73,7 +73,6 @@ def login():
         password_data = form.password.data
         remember = form.remember_me.data
 
-        # TODO: can this be `current_user`?
         user = current_round.get_user(user_email)
         if not user.check_password(password_data):
             flash("Invalid username or password!")
@@ -161,12 +160,22 @@ def account_recovery():
 @login_required
 def santa():
     # You need to submit your wishes before you can see whom you're paired with
-    if not current_user.wishes:
+    if current_user.n_wishes() == 0:
         return redirect(url_for("wishes"))
 
     recipient = current_user.recipient
 
     return render_template("santa.html", user=current_user, recipient=recipient)
+
+
+@app.route("/round_status")
+@login_required
+def round_status():
+    if not current_user.is_admin:
+        return redirect(url_for("login"))
+
+    status_data = current_round.status()
+    return render_template("round_status.html", status_data=status_data)
 
 
 # Run the application
