@@ -1,8 +1,10 @@
 from typing import Optional, List
 import uuid
+import enum
+from datetime import datetime
 
-# Going to try the new-style SQLAlchemy ORM API
 from sqlalchemy import ForeignKey
+from sqlalchemy.sql import func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -11,6 +13,18 @@ from flask_login import UserMixin
 def make_temp_password():
     pw = str(uuid.uuid4())[:6]
     return pw
+
+
+# TODO: Might need to live elsewhere
+class CommunicationKind(enum.Enum):
+    KICKOFF = "kickoff"
+    REMINDER = "reminder"
+    ACCOUNT_RECOVERY = "account_recovery"
+
+
+class CommunicationStatus(enum.Enum):
+    SUCCESS = "success"
+    ERROR = "error"
 
 
 class Base(DeclarativeBase):
@@ -43,6 +57,7 @@ class User(Base, UserMixin):
         remote_side=[email]
     )
     wishes: Mapped[List["Wish"]] = relationship(lazy="joined")
+    communications = relationship("Communication")
     password_hash: Mapped[str]
     temporary_password: Mapped[str] = mapped_column(default=make_temp_password())
     user_has_set_own_password: Mapped[bool] = mapped_column(default=False)
@@ -79,7 +94,19 @@ class Wish(Base):
     wish_id: Mapped[int] = mapped_column(primary_key=True)
     description: Mapped[str]
     link: Mapped[Optional[str]]
-    user_email = mapped_column(ForeignKey("user.email"))
+    user_email: Mapped[str] = mapped_column(ForeignKey("user.email"))
 
     def __repr__(self):
         return f"Wish(description={self.description}, link={self.link}"
+
+
+class Communication(Base):
+
+    __tablename__ = "communication"
+
+    communication_id: Mapped[int] = mapped_column(primary_key=True)
+    user_email: Mapped[str] = mapped_column(ForeignKey("user.email"))
+    kind: Mapped[CommunicationKind] = mapped_column(nullable=False)
+    status: Mapped[CommunicationStatus] = mapped_column(nullable=False)
+    detail: Mapped[Optional[str]]
+    timestamp: Mapped[datetime] = mapped_column(server_default=func.now())

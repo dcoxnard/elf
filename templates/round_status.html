@@ -19,9 +19,18 @@
     <div class="user-status-data {{ progress_class }}">
     <h2>User: {{ user_email }}</h2>
     {% for key, value in user_data.items() %}
-        <p>{{ key }}:  {{ value }}</p>
+        {% if key != "communications" %}
+            <p>{{ key }}:  {{ value }}</p>
+        {% endif %}
+    {% endfor %}
+
+    {% for comm in user_data["communications"] %}
+        {% for key, value in comm.items() %}
+            <p>{{ key }}:  {{ value }}</p>
+        {% endfor %}
     {% endfor %}
     </div>
+
 {% endfor %}
 
 {% endblock %}

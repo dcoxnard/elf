@@ -3,7 +3,7 @@ import os
 from sqlalchemy.orm import Session
 
 from make_pairs import make_pairs
-from models import User, Wish
+from models import User, Wish, Communication, CommunicationKind, CommunicationStatus
 from db import engine, db_path
 from mail_api import MailApi, ADMIN_ADDR
 import messages
@@ -122,8 +122,25 @@ class Round:
     def send_email(user_email, subject_line, message):
         mailer = MailApi()
         from_ = ADMIN_ADDR
-        mailer.send_email(from_=from_, to_=user_email,
-                          subject_line=subject_line, message_body=message)
+        try:
+            mailer.send_email(from_=from_, to_=user_email,
+                              subject_line=subject_line, message_body=message)
+        except Exception as e:
+            status = CommunicationStatus.ERROR
+            detail = str(e)
+        else:
+            status = CommunicationStatus.SUCCESS
+            detail = None
+        return status, detail
+
+    def record_communication(self, user_email, kind, status, detail):
+        with Session(self.engine) as session:
+            comm = Communication(user_email=user_email,
+                                 kind=kind,
+                                 status=status,
+                                 detail=detail)
+            session.add(comm)
+            session.commit()
 
     def send_kickoff_email(self, name, user_email, password):
         url = "localhost:5000/"
@@ -131,8 +148,13 @@ class Round:
                                                           email=user_email,
                                                           password=password,
                                                           url=url)
-        self.send_email(user_email, messages.kickoff_subject_line,
-                        kickoff_message)
+        status, detail = self.send_email(user_email,
+                                         messages.kickoff_subject_line,
+                                         kickoff_message)
+        self.record_communication(user_email,
+                                  CommunicationKind.KICKOFF,
+                                  status,
+                                  detail)
 
     def send_all_kickoff_email(self):
         # Credentials only valid as long as nobody has set their PW yet
@@ -149,8 +171,13 @@ class Round:
     def send_reminder_email(self, name, user_email):
         reminder_message = messages.reminder_message.format(name=name,
                                                             email=user_email)
-        self.send_email(user_email, messages.reminder_subject_line,
-                        reminder_message)
+        status, detail = self.send_email(user_email,
+                                         messages.reminder_subject_line,
+                                         reminder_message)
+        self.record_communication(user_email,
+                                  CommunicationKind.REMINDER,
+                                  status,
+                                  detail)
 
     def send_all_reminder_email(self):
         with Session(self.engine) as session:
@@ -173,8 +200,13 @@ class Round:
         token = generate_token(user_email)
         recovery_message = messages.account_recovery_message.format(name=name,
                                                                     token=token)
-        self.send_email(user_email, messages.account_recovery_subject_line,
-                        recovery_message)
+        status, detail = self.send_email(user_email,
+                                         messages.account_recovery_subject_line,
+                                         recovery_message)
+        self.record_communication(user_email,
+                                  CommunicationKind.ACCOUNT_RECOVERY,
+                                  status,
+                                  detail)
 
     def status(self):
         with Session(self.engine) as session:
@@ -194,6 +226,21 @@ class Round:
                     "n_wishes",
                 ]:
                     user_data[method] = getattr(user, method).__call__()
+
+                communications = sorted(user.communications, key=lambda c: c.timestamp)
+                communications_data = []
+                for comm in communications:
+                    data = dict()
+                    for attr in [
+                        "kind",
+                        "status",
+                        "detail",
+                        "timestamp"
+                    ]:
+                        data[attr] = getattr(comm, attr)
+                    communications_data.append(data)
+                user_data["communications"] = communications_data
+
                 status_data[user.email] = user_data
         return status_data
 
@@ -201,11 +248,14 @@ class Round:
 if __name__ == "__main__":
     round = Round()
 
-    import csv
+    # import csv
+    #
+    # with open("sample_users.csv", "r") as f_obj:
+    #     reader = csv.reader(f_obj)
+    #     rows = [row for row in reader]
+    #
+    # header, users = rows[0], rows[1:]
+    # round.register_users(users)
 
-    with open("sample_users.csv", "r") as f_obj:
-        reader = csv.reader(f_obj)
-        rows = [row for row in reader]
-
-    header, users = rows[0], rows[1:]
-    round.register_users(users)
+    from pprint import pprint
+    pprint(round.status())
