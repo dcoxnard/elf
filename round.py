@@ -48,8 +48,14 @@ class Round:
                 session.add(user)
             session.flush()
             for email, _, _, _, previous_recipient_email in users:
-                left = session.query(User).where(User.email == email).one()
-                right = session.query(User).where(User.email == previous_recipient_email).one()
+                left = (session
+                        .query(User)
+                        .where(User.email == email)
+                        .one())
+                right = (session
+                         .query(User)
+                         .where(User.email == previous_recipient_email)
+                         .one())
                 left.previous_recipient = right
                 session.add(left)
             session.commit()
@@ -67,8 +73,14 @@ class Round:
             user_names = list(partition.keys())
             pairs = make_pairs(user_names, partition, previous_recipients)
             for left, right in pairs:
-                santa = session.query(User).where(User.email == left).one()
-                recipient = session.query(User).where(User.email == right).one()
+                santa = (session
+                         .query(User)
+                         .where(User.email == left)
+                         .one())
+                recipient = (session
+                             .query(User)
+                             .where(User.email == right)
+                             .one())
                 santa.recipient = recipient
                 session.add(santa)
             session.commit()
