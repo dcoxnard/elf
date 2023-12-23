@@ -53,6 +53,7 @@ print(result)
 - Helpful text for form elements
 - Helpful message when form validation fails
 - Test: that kickoff emailer works with temp pw sent
+- Test: communications are correctly tracked and displayed in admin panel
 - admin-only endpoint to send a beginning-of-round email blast
 - admin-only functionality to (re-)initialize, using previous recipients
 - admin-only functionality to export pairs after the round is over
