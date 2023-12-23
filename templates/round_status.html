@@ -9,18 +9,19 @@
     {% set n_wishes = user_data["n_wishes"] %}
 
     {% if not user_has_set_own_password %}
-        {% set css_class = 'not_started' %}
+        {% set progress_class = 'not_started' %}
     {% elif n_wishes == 0 %}
-        {% set css_class = 'in_progress' %}
+        {% set progress_class = 'in_progress' %}
     {% else %}
-        {% set css_class = 'completed' %}
+        {% set progress_class = 'completed' %}
     {% endif %}
 
+    <div class="user-status-data {{ progress_class }}">
     <h2>User: {{ user_email }}</h2>
-    <p>{{ css_class }}</p>
     {% for key, value in user_data.items() %}
         <p>{{ key }}:  {{ value }}</p>
     {% endfor %}
+    </div>
 {% endfor %}
 
 {% endblock %}
