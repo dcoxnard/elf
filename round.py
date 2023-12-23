@@ -146,9 +146,11 @@ class Round:
                 password = user.temporary_password
                 self.send_kickoff_email(name, email, password)
 
-    def send_reminder_email(self, user_email):
+    def send_reminder_email(self, name, user_email):
+        reminder_message = messages.reminder_message.format(name=name,
+                                                            email=user_email)
         self.send_email(user_email, messages.reminder_subject_line,
-                        messages.reminder_message)
+                        reminder_message)
 
     def send_all_reminder_email(self):
         with Session(self.engine) as session:
@@ -158,12 +160,19 @@ class Round:
             # This could be done in the qry itself, but doesn't make a big diff
             remind_users = [u for u in users if u.n_wishes() == 0]
             for user in remind_users:
+                name = user.name
                 email = user.email
-                self.send_reminder_email(email)
+                self.send_reminder_email(name, email)
 
     def send_recovery_email(self, user_email):
+        with Session(self.engine) as session:
+            name = (session
+                    .query(User.name)
+                    .where(User.email == user_email)
+                    .one())[0]
         token = generate_token(user_email)
-        recovery_message = messages.account_recovery_message.format(token=token)
+        recovery_message = messages.account_recovery_message.format(name=name,
+                                                                    token=token)
         self.send_email(user_email, messages.account_recovery_subject_line,
                         recovery_message)
 
@@ -180,4 +189,4 @@ if __name__ == "__main__":
     # header, users = rows[0], rows[1:]
     # round.register_users(users)
 
-    round.send_all_kickoff_email()
+    round.send_all_reminder_email()

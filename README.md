@@ -52,8 +52,7 @@ print(result)
 ## TODO
 - Helpful text for form elements
 - Helpful message when form validation fails
-- Test: that kickoff emailer works with temp token sent
-- Shape up the email message templates
+- Test: that kickoff emailer works with temp pw sent
 - admin-only endpoint to send a beginning-of-round email blast
 - admin-only functionality to (re-)initialize, using previous recipients
 - admin-only functionality to export pairs after the round is over
@@ -62,3 +61,4 @@ print(result)
 - Navigation
 - Logging
 - Optional show button for PW
+- Uncouple the expiration time messages - put in app config

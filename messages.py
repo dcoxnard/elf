@@ -22,7 +22,9 @@ The rules:
 - Everybody is paired up with somebody other than who they Santa'd for last year
 - Please keep gift totals to $50 or under
 - Please don't delay in submitting your wishes -- you want to give your Secret Santa
-some time to do their elfing!  
+some time to do their elfing!
+- Please don't share your username + password with anyone, as these are meant
+to keep things *secret*
 
 Please log in using this login information:
 
@@ -39,12 +41,41 @@ MoodyElfBot
 
 reminder_subject_line = "Reminding you!"
 reminder_message = """
-This is the reminder message!
+Dear {name:s},
+
+This is a friendly reminder to log in and submit your wishes for this year's
+Secret Santa!  Sombody has been paired with you, but they're waiting for you
+to submit your wish list so that they can begin their elfing.
+
+You should have previously received an email with your username and temporary password that you can
+use to log in.
+
+If you've already logged in for the first time, but can't remember your password,
+you can reset your password using the following link:
+localhost:5000/account_recovery_request
+
+Happy Elfing!
+
+Signed,
+MoodyElfBot
 """.strip()
 
 account_recovery_subject_line = "Recover your account!"
 account_recovery_message = """
-This is the account recovery message!
+Dear {name:s},
 
-Please visit this address to reset your password: localhost:5000/confirm_email/{token:s}
+I received a request to reset your password.  If this was you, please visit the following
+link to reset your password.  Please don't share this link with anybody, as it is meant
+to help keep this a *Secret* Santa.
+
+If you didn't request a password reset, please ignore this email.
+
+This reset link will expire in 1 hour.
+
+Link: localhost:5000/confirm_email/{token:s}
+
+Happy Elfing!
+
+Signed,
+MoodyElfBot
 """.strip()
