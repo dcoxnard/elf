@@ -1,10 +1,16 @@
 from typing import Optional, List
+import uuid
 
 # Going to try the new-style SQLAlchemy ORM API
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+
+
+def make_temp_password():
+    pw = str(uuid.uuid4())[:6]
+    return pw
 
 
 class Base(DeclarativeBase):
@@ -38,6 +44,7 @@ class User(Base, UserMixin):
     )
     wishes: Mapped[List["Wish"]] = relationship(lazy="joined")
     password_hash: Mapped[str]
+    temporary_password: Mapped[str] = mapped_column(default=make_temp_password())
     user_has_set_own_password: Mapped[bool] = mapped_column(default=False)
     is_admin: Mapped[bool] = mapped_column(default=False)
 
