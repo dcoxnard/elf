@@ -1,15 +1,20 @@
 <!doctype html>
 <html>
-<head>
-    {% if title %}
-    <title>{{ title }} - Microblog</title>
-    {% else %}
-    <title>Welcome to Microblog</title>
-    {% endif %}
-</head>
-<body>
-<div>Microblog: <a href="/index">Home</a></div>
-<hr>
-{% block content %}{% endblock %}
-</body>
+    <head>
+        <title>Moody Secret Santa</title>
+    </head>
+    <body>
+        <div>
+            {% if user %}
+                Moody Secret Santa - {{ user.name }}
+            {% else %}
+                Moody Secret Santa
+            {% endif %}
+        </div>
+        <hr>
+        {% block content %}{% endblock %}
+        <footer class="footer">
+            Copyright 2023 MoodyElfBot
+        </footer>
+    </body>
 </html>

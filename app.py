@@ -69,7 +69,7 @@ def wishes():
         current_round.record_wishes(current_user.email, wishes, links)
         return redirect(url_for("santa"))
 
-    return render_template("wishes.html", form=form)
+    return render_template("wishes.html", form=form, user=current_user)
 
 
 @app.route("/login", methods=["GET", "POST"])

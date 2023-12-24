@@ -2,34 +2,64 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.name }}!</h1>
-    {% if current_user.wishes %}
+    {% if current_user.wishes %}  ## Pretty sure this is not possible given the app routing
         {% for wish in current_user.wishes %}
-        <div><p>{{ current_user.name }} says: <b>{{ wish.description }}</b></p></div>
+            <div><p>{{ current_user.name }} says: <b>{{ wish.description }}</b></p></div>
         {% endfor %}
     {% else %}
         <div><p>No wishes yet!</p></div>
 
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.wish1.label }}<br>
-            {{ form.wish1(size=32) }}<br>
-            {{ form.link1.label }}<br>
-            {{ form.link1(size=32) }}
-        </p>
-        <p>
-            {{ form.wish2.label }}<br>
-            {{ form.wish2(size=32) }}<br>
-            {{ form.link2.label }}<br>
-            {{ form.link2(size=32) }}
-        </p>
-        <p>
-            {{ form.wish3.label }}<br>
-            {{ form.wish3(size=32) }}<br>
-            {{ form.link3.label }}<br>
-            {{ form.link3(size=32) }}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="wish-group">
+                <div class="form-group">
+                    <div class="alert alert-error">
+                        {{ "".join(form.wish1.errors) }}
+                    </div>
+                {{ form.wish1(size=32, placeholder=form.wish1.label.text, class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <div class="alert alert-error">
+                        {{ "".join(form.link1.errors) }}
+                    </div>
+                    {{ form.link1(size=32, placeholder=form.link1.label.text, class="form-control") }}
+                </div>
+            </div>
+
+            <div class="wish-group">
+                <div class="form-group">
+                    <div class="alert alert-error">
+                        {{ "".join(form.wish2.errors) }}
+                    </div>
+                    {{ form.wish2(size=32, placeholder=form.wish2.label.text, class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <div class="alert alert-error">
+                        {{ "".join(form.link2.errors) }}
+                    </div>
+                    {{ form.link2(size=32, placeholder=form.link2.label.text, class="form-control") }}
+                </div>
+            </div>
+
+            <div class="wish-group">
+                <div class="form-group">
+                    <div class="alert alert-error">
+                        {{ "".join(form.wish3.errors) }}
+                    </div>
+                    {{ form.wish3(size=32, placeholder=form.wish3.label.text, class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <div class="alert alert-error">
+                        {{ "".join(form.link3.errors) }}
+                    </div>
+                    {{ form.link3(size=32, placeholder=form.link3.label.text, class="form-control") }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="form-control") }}
+            </div>
+        </form>
     {% endif %}
 {% endblock %}
