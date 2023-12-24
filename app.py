@@ -1,6 +1,10 @@
+import os
+import csv
+from io import StringIO
 from urllib.parse import urlsplit
 
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, \
+    Response
 from flask_login import LoginManager, current_user, login_user, logout_user, \
     login_required
 
@@ -17,7 +21,15 @@ login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
 
+# TODO: This should live in a session
 current_round = Round()
+if not current_round.has_users():
+    initialize_file = os.environ["APP_INITIALIZE_FILE"]
+    with open(initialize_file, "r") as f_obj:
+        reader = csv.reader(f_obj)
+        rows = [row for row in reader]
+    header, users = rows[0], rows[1:]
+    current_round.register_users(users)
 
 
 @login_manager.user_loader
@@ -176,6 +188,44 @@ def round_status():
 
     status_data = current_round.status()
     return render_template("round_status.html", status_data=status_data)
+
+
+@app.route("/pairs")
+@login_required
+def pairs():
+    if not current_user.is_admin:
+        return redirect(url_for("login"))
+
+    current_round.make_pairs()
+    return redirect(url_for("round_status"))
+
+
+@app.route("/kickoff")
+@login_required
+def kickoff():
+    if not current_user.is_admin:
+        return redirect(url_for("login"))
+
+    current_round.send_all_kickoff_email()
+    return redirect(url_for("round_status"))
+
+
+@app.route("/export")
+@login_required
+def export():
+    if not current_user.is_admin:
+        return redirect(url_for("login"))
+
+    export_data = current_user.export_for_next_round()
+    lines = StringIO()
+    writer = csv.writer(lines)
+    writer.writerows(export_data)
+    csv_string = lines.getvalue()
+    return Response(
+        csv_string,
+        mimetype="text/csv",
+        headers={"Content-disposition": "attachment; filename=export.csv"}
+    )
 
 
 # Run the application

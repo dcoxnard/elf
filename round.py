@@ -3,7 +3,8 @@ import os
 from sqlalchemy.orm import Session
 
 from make_pairs import make_pairs
-from models import User, Wish, Communication, CommunicationKind, CommunicationStatus
+from models import User, Wish, Communication, CommunicationKind, \
+    CommunicationStatus, make_temp_password
 from db import engine, db_path
 from mail_api import MailApi, ADMIN_ADDR
 import messages
@@ -24,6 +25,11 @@ class Round:
         if not os.path.isfile(db_path):
             from models import Base
             Base.metadata.create_all(engine)
+
+    def has_users(self, check_number=10):
+        with Session(self.engine) as session:
+            n = session.query(User).count()
+        return n >= check_number
 
     def register_users(self, users):
         """
@@ -244,6 +250,39 @@ class Round:
                 status_data[user.email] = user_data
         return status_data
 
+    def export_for_next_round(self):
+        header = [
+            "email",
+            "name",
+            "family",
+            "image",
+            "previous_recipient",
+            "is_admin",
+            "temporary_password"
+        ]
+        data = [header]
+        with Session(self.engine) as session:
+            users = (session
+                     .query(User)
+                     .all())
+            for user in users:
+                if user.recipient is not None:
+                    recipient_email = user.recipient.email
+                else:
+                    recipient_email = None
+                row = [
+                    user.email,
+                    user.name,
+                    user.family,
+                    user.image,
+                    recipient_email,
+                    user.is_admin
+                ]
+                temp_pw = make_temp_password()
+                row.append(temp_pw)
+                data.append(row)
+        return data
+
 
 if __name__ == "__main__":
     round = Round()
@@ -257,5 +296,7 @@ if __name__ == "__main__":
     # header, users = rows[0], rows[1:]
     # round.register_users(users)
 
-    from pprint import pprint
-    pprint(round.status())
+    # from pprint import pprint
+    # pprint(round.status())
+
+    round.export_for_next_round()
