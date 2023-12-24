@@ -61,3 +61,5 @@ print(result)
 - Upload image
 - app's Round() should live as a session variable
 - Favicon
+- Logout Button
+- Account recovery link on login page
