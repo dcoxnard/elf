@@ -1,3 +1,4 @@
-email,name,family
-alice@gmail.com,alice,apple
-bob@gmail.com,bob,birne
+email,name,family,password,previous_recipient_email
+alice@gmail.com,alice,apple,alice,bob@gmail.com
+bob@gmail.com,bob,birne,bob,charlie@gmail.com
+charlie@gmail.com,charlie,courgette,charlie,alice@gmail.com

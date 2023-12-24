@@ -9,11 +9,11 @@
     {% set n_wishes = user_data["n_wishes"] %}
 
     {% if not user_has_set_own_password %}
-        {% set progress_class = 'not_started' %}
+        {% set progress_class = 'progress-not-started' %}
     {% elif n_wishes == 0 %}
-        {% set progress_class = 'in_progress' %}
+        {% set progress_class = 'progress-in-progress' %}
     {% else %}
-        {% set progress_class = 'completed' %}
+        {% set progress_class = 'progress-completed' %}
     {% endif %}
 
     <div class="user-status-data {{ progress_class }}">

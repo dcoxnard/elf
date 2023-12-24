@@ -1,22 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.name }}!</h1>
 
-    <p>You are paired with {{ recipient.name }}</p>
+    {% set recipient = current_user.recipient %}
+
+    <div class="greeting">
+        Hi, {{ current_user.name }}!  You have been paired with <strong>{{ recipient.name }}</strong>.
+    </div>
+
     {% if recipient.wishes %}
-    <p>Here are their three wishes:</p>
+    <div class="wish-content wish-content-recipient">
+        Here are their three wishes:
         {% for wish in recipient.wishes %}
-        <div><p>{{ wish.description }} ({{ wish.link }})</b></p></div>
+        <div class="wish-group">
+            <div class="wish">
+                <div class="wish wish-description">
+                    {{ wish.description }}
+                </div>
+                {% if wish.link %}
+                <div class="wish wish-link">
+                    ({{ wish.link }})
+                </div>
+                {% endif %}
+            </div>
+        </div>
         {% endfor %}
+    </div>
     {% else %}
-    <p>They have not submitted their wishes yet!  Stay tuned...</p>
+    <div class="wish-content wish-content-recipient null-content">
+        They have not submitted their wishes yet!  Don't forget to check back here for when they do...
+    </div>
     {% endif %}
 
-    <p>Here are the things you wished for:</p>
+
+    <div class="wish-content wish-content-user">
+        Here are the things you wished for:
         {% for wish in current_user.wishes %}
-            <div><p>{{ wish.description }} ({{ wish.link }})</b></p></div>
+            <div class="wish-group">
+                <div class="wish">
+                    <div class="wish wish-description">
+                        {{ wish.description }}
+                    </div>
+                    {% if wish.link %}
+                    <div class="wish wish-link">
+                        ({{ wish.link }})
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
         {% endfor %}
+    </div>
 
 
 {% endblock %}

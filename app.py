@@ -175,9 +175,7 @@ def santa():
     if current_user.n_wishes() == 0:
         return redirect(url_for("wishes"))
 
-    recipient = current_user.recipient
-
-    return render_template("santa.html", user=current_user, recipient=recipient)
+    return render_template("santa.html", user=current_user)
 
 
 @app.route("/round_status")
