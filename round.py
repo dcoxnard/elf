@@ -26,7 +26,7 @@ class Round:
             from models import Base
             Base.metadata.create_all(engine)
 
-    def has_users(self, check_number=10):
+    def has_users(self, check_number=3):  # TODO: Debug setting
         with Session(self.engine) as session:
             n = session.query(User).count()
         return n >= check_number
