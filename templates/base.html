@@ -11,6 +11,11 @@
                 Moody Secret Santa
             {% endif %}
         </div>
+        {% if user %}
+            <div>
+                <a href={{ url_for("logout") }} >Logout</a>
+            </div>
+        {% endif %}
         <hr>
         {% block content %}{% endblock %}
         <footer class="footer">
