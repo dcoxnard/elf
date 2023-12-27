@@ -53,7 +53,6 @@ print(result)
 - Helpful text for form elements
 - Helpful message when form validation fails
 - Styling
-- Logout button
 - Navigation
 - Logging
 - Optional show button for PW
