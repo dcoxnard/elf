@@ -121,7 +121,7 @@ def set_own_password():
         current_round.set_user_password(current_user.email, password)
         return redirect(url_for("santa"))
 
-    return render_template("set_own_password.html", form=form)
+    return render_template("set_own_password.html", form=form, user=current_user)
 
 
 # https://www.freecodecamp.org/news/setup-email-verification-in-flask-app/
