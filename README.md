@@ -50,11 +50,9 @@ print(result)
 ```
 
 ## TODO
-- Helpful text for form elements
 - Styling
 - Navigation
 - Logging
-- Optional show button for PW
 - Uncouple the expiration time messages - put in app config
 - Upload image
 - app's Round() should live as a session variable

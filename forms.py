@@ -7,7 +7,7 @@ from wtforms.validators import InputRequired, Email, URL, ValidationError, \
 def validate_password(form, field):
     if field.data != form.new_password.data:
         # This validator needs to therefore be bound to password2
-        raise ValidationError("Passwords must match")
+        raise ValidationError("Passwords must match.")
 
 
 def strip_text(field):
