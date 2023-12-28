@@ -4,7 +4,7 @@ from wtforms.validators import InputRequired, Email, URL, ValidationError, \
     Optional
 
 
-def validate_password(form, field):
+def validate_new_passwords_match(form, field):
     if field.data != form.new_password.data:
         # This validator needs to therefore be bound to password2
         raise ValidationError("Passwords must match.")
@@ -51,7 +51,7 @@ class SetOwnPasswordForm(FlaskForm):
                                  validators=[InputRequired()],
                                  filters=[strip_text])
     new_password2 = PasswordField("Confirm New Password",
-                                  validators=[InputRequired(), validate_password],
+                                  validators=[InputRequired(), validate_new_passwords_match],
                                   filters=[strip_text])
     submit = SubmitField("Submit")
 
@@ -72,6 +72,6 @@ class AccountRecoveryForm(FlaskForm):
                                  validators=[InputRequired()],
                                  filters=[strip_text])
     new_password2 = PasswordField("Confirm New Password",
-                                  validators=[InputRequired(), validate_password],
+                                  validators=[InputRequired(), validate_new_passwords_match],
                                   filters=[strip_text])
     submit = SubmitField("Submit")
