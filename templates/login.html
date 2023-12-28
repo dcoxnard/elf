@@ -25,5 +25,8 @@
     <div class="form-group">
         {{ form.submit(class="btn btn-submit") }}
     </div>
+    <div class="password-reset">
+        <a href="{{ url_for('account_recovery_request') }}">Reset Password</a>
+    </div>
 </form>
 {% endblock %}

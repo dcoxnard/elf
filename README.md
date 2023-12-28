@@ -61,3 +61,5 @@ print(result)
 - Favicon
 - Logout Button
 - Account recovery link on login page
+- Need to display logout on account recovery template
+- Helpful message when credentials don't match

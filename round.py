@@ -287,16 +287,16 @@ class Round:
 if __name__ == "__main__":
     round = Round()
 
-    # import csv
-    #
-    # with open("sample_users.csv", "r") as f_obj:
-    #     reader = csv.reader(f_obj)
-    #     rows = [row for row in reader]
-    #
-    # header, users = rows[0], rows[1:]
-    # round.register_users(users)
+    import csv
 
-    # from pprint import pprint
-    # pprint(round.status())
+    with open("sample_users.csv", "r") as f_obj:
+        reader = csv.reader(f_obj)
+        rows = [row for row in reader]
 
-    round.export_for_next_round()
+    header, users = rows[0], rows[1:]
+    round.register_users(users)
+
+    from pprint import pprint
+    pprint(round.status())
+
+    # round.export_for_next_round()

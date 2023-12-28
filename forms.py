@@ -5,7 +5,8 @@ from wtforms.validators import InputRequired, Email, URL, ValidationError, \
 
 
 def validate_password(form, field):
-    if field.data != form.new_password2.data:
+    if field.data != form.new_password.data:
+        # This validator needs to therefore be bound to password2
         raise ValidationError("Passwords must match")
 
 
@@ -17,7 +18,7 @@ def strip_text(field):
 class LoginForm(FlaskForm):
 
     username = StringField("Username",
-                           validators=[Email()],
+                           validators=[InputRequired(), Email()],
                            filters=[strip_text])
     password = PasswordField("Password", validators=[InputRequired()])
     remember_me = BooleanField("Remember Me")
@@ -47,10 +48,10 @@ class SetOwnPasswordForm(FlaskForm):
                                       validators=[InputRequired()],
                                       filters=[strip_text])
     new_password = PasswordField("New Password",
-                                 validators=[InputRequired(), validate_password],
+                                 validators=[InputRequired()],
                                  filters=[strip_text])
     new_password2 = PasswordField("Confirm New Password",
-                                  validators=[InputRequired()],
+                                  validators=[InputRequired(), validate_password],
                                   filters=[strip_text])
     submit = SubmitField("Submit")
 
@@ -59,7 +60,7 @@ class SetOwnPasswordForm(FlaskForm):
 class AccountRecoveryRequestForm(FlaskForm):
 
     email = StringField("Your Email Address",
-                        validators=[Email()],
+                        validators=[InputRequired(), Email()],
                         filters=[strip_text])
     submit = SubmitField("Submit")
 

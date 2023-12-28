@@ -50,6 +50,9 @@ def root():
 @app.route("/wishes", methods=["GET", "POST"])
 @login_required
 def wishes():
+    if not current_user.user_has_set_own_password:
+        return redirect(url_for("login"))
+
     if current_user.wishes:
         return redirect(url_for("santa"))
 
@@ -76,8 +79,11 @@ def wishes():
 def login():
     # TODO: I don't like this fxn structure, seems to implicitly
     # branch on GET vs POST.  But not 100% sure.  Need to experiment
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.user_has_set_own_password:
         return redirect(url_for("wishes"))
+    elif current_user.is_authenticated:
+        return redirect(url_for("account_recovery"))
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -130,13 +136,13 @@ def account_recovery_request():
         # TODO: Implement this template
         render_template("account_recovery_direction.html")
 
-    return render_template("account_recovery_request.html", form=form)
+    return render_template("account_recovery_request.html", form=form, user=current_user)
 
 
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("wishes"))
+    return redirect(url_for("login"))
 
 
 @app.route("/confirm_email/<token>")
@@ -165,12 +171,15 @@ def account_recovery():
         current_round.set_user_password(current_user.email, password1)
         return redirect(url_for("santa"))
 
-    return render_template("account_recovery.html", form=form)
+    return render_template("account_recovery.html", form=form, user=current_user)
 
 
 @app.route("/santa")
 @login_required
 def santa():
+    if not current_user.user_has_set_own_password:
+        return redirect(url_for("login"))
+
     # You need to submit your wishes before you can see whom you're paired with
     if current_user.n_wishes() == 0:
         return redirect(url_for("wishes"))

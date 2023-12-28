@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Sign In</h1>
+<h1>Reset Password</h1>
 <form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
-    <div>
-        {{ form.email(size=32, placeholder=form.email.label) }}
+    <div class="form-group">
+        <div class="alert alert-error">
+            {{ "".join(form.email.errors) }}
+        </div>
+        {{ form.email(size=32, placeholder=form.email.label.text) }}
     </div>
     <p>{{ form.submit() }}</p>
 </form>
