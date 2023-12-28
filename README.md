@@ -51,7 +51,6 @@ print(result)
 
 ## TODO
 - Helpful text for form elements
-- Helpful message when form validation fails
 - Styling
 - Navigation
 - Logging
