@@ -56,5 +56,4 @@ print(result)
 - Uncouple the expiration time messages - put in app config
 - Upload image
 - app's Round() should live as a session variable
-- Helpful message when credentials don't match
 - Uncoupled user-loader that can be reused by eg flask-login, wtform pw validation, etc.

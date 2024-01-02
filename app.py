@@ -94,7 +94,7 @@ def login():
         user = current_round.get_user(user_email)
         if not user.check_password(password_data):
             flash("Invalid username or password!")
-            return redirect(url_for("login"))
+            return redirect(url_for("login", credential_error=True))
 
         login_user(user, remember=remember)
 
@@ -109,7 +109,9 @@ def login():
             return redirect(url_for("wishes"))
         return redirect(next_page)
 
-    return render_template("login.html", title='Sign In', form=form)
+    error = request.args.get("credential_error", False)
+    return render_template("login.html", title='Sign In', form=form,
+                           error=error)
 
 
 @app.route("/set_own_password", methods=["GET", "POST"])

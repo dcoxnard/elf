@@ -5,6 +5,11 @@
 <form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
     <div class="form-group">
+        {% if error %}
+        <div class="alert alert-error">
+            Username or Password not found.
+        </div>
+        {% endif %}
         <div class="alert alert-error">
             {{ "".join(form.username.errors) }}
         </div>
