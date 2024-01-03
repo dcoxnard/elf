@@ -1,7 +1,9 @@
 import os
+import sys
 import csv
 from io import StringIO
 from urllib.parse import urlsplit
+import logging
 
 from flask import Flask, render_template, redirect, url_for, flash, request, \
     Response
@@ -19,6 +21,32 @@ app.secret_key = secret_key
 
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
+
+# TODO: Refactor the logger setup
+# TODO: The logger gets initialized twice, need to fix that
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+
+def handle_exception(exception_type, exception_value, exception_traceback):
+    if issubclass(exception_type, KeyboardInterrupt):
+        sys.__excepthook__(exception_type, exception_value, exception_traceback)
+    else:
+        logger.error("Uncaught exception", exc_info=(exception_type,
+                                                     exception_value,
+                                                     exception_traceback))
+
+
+logger.excepthook = handle_exception
+formatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
+
+filehandler = logging.FileHandler("elf.log")
+filehandler.setFormatter(formatter)
+logger.addHandler(filehandler)
+
+consolehandler = logging.StreamHandler()
+consolehandler.setFormatter(formatter)
+logger.addHandler(consolehandler)
 
 
 # TODO: This should live in a session
