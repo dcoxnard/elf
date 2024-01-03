@@ -36,7 +36,7 @@ class Round:
         Initialize DB with user information
 
         :param users: List[Tuple[str, str] of emails and names
-        :return: None
+        :return: number of users registered
         """
 
         with Session(self.engine) as session:
@@ -52,6 +52,7 @@ class Round:
                                 temporary_password=password)
                 user.set_password(password, user_has_set=False)
                 session.add(user)
+            n_users = len(session.new)
             session.flush()
             for email, _, _, _, previous_recipient_email in users:
                 left = (session
@@ -65,12 +66,13 @@ class Round:
                 left.previous_recipient = right
                 session.add(left)
             session.commit()
+        return n_users
 
     def make_pairs(self):
         """
         Generate a random pairing and persist it
 
-        :return: None
+        :return: number of pairs persisted
         """
         with Session(self.engine) as session:
             users = session.query(User).all()
@@ -89,7 +91,9 @@ class Round:
                              .one())
                 santa.recipient = recipient
                 session.add(santa)
+            n_pairs = len(session.dirty)  # TODO: Test this
             session.commit()
+        return n_pairs
 
     # TODO: Not sure about this function signature...
     def record_wishes(self, user_email, wishes, links):
@@ -102,8 +106,10 @@ class Round:
                 if wish or link:
                     new_wish = Wish(description=wish, link=link)
                     user.wishes.append(new_wish)
+            n_wishes = len(session.new)  # TODO: Test this
             session.add(user)
             session.commit()
+        return n_wishes
 
     # Eager load for flask-login
     def get_user(self, user_email):
@@ -164,6 +170,7 @@ class Round:
 
     def send_all_kickoff_email(self):
         # Credentials only valid as long as nobody has set their PW yet
+        sent_emails = []
         with Session(self.engine) as session:
             users = (session
                      .query(User)
@@ -173,6 +180,8 @@ class Round:
                 email = user.email
                 password = user.temporary_password
                 self.send_kickoff_email(name, email, password)
+                sent_emails.append(email)
+        return sent_emails
 
     def send_reminder_email(self, name, user_email):
         reminder_message = messages.reminder_message.format(name=name,

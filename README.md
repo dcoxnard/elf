@@ -57,3 +57,4 @@ print(result)
 - Upload image
 - app's Round() should live as a session variable
 - Uncoupled user-loader that can be reused by eg flask-login, wtform pw validation, etc.
+- Admin panel

@@ -1,9 +1,7 @@
 import os
-import sys
 import csv
 from io import StringIO
 from urllib.parse import urlsplit
-import logging
 
 from flask import Flask, render_template, redirect, url_for, flash, request, \
     Response
@@ -14,6 +12,7 @@ from forms import LoginForm, WishesForm, SetOwnPasswordForm, \
     AccountRecoveryRequestForm, AccountRecoveryForm
 from round import Round
 from app_token import secret_key, validate_token
+import elf_logger
 
 app = Flask(__name__)
 
@@ -22,42 +21,19 @@ app.secret_key = secret_key
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
-# TODO: Refactor the logger setup
-# TODO: The logger gets initialized twice, need to fix that
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-
-def handle_exception(exception_type, exception_value, exception_traceback):
-    if issubclass(exception_type, KeyboardInterrupt):
-        sys.__excepthook__(exception_type, exception_value, exception_traceback)
-    else:
-        logger.error("Uncaught exception", exc_info=(exception_type,
-                                                     exception_value,
-                                                     exception_traceback))
-
-
-logger.excepthook = handle_exception
-formatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
-
-filehandler = logging.FileHandler("elf.log")
-filehandler.setFormatter(formatter)
-logger.addHandler(filehandler)
-
-consolehandler = logging.StreamHandler()
-consolehandler.setFormatter(formatter)
-logger.addHandler(consolehandler)
-
+logger = elf_logger.logger
 
 # TODO: This should live in a session
 current_round = Round()
 if not current_round.has_users():
     initialize_file = os.environ["APP_INITIALIZE_FILE"]
+    logger.info(f"Registering users from {initialize_file}")
     with open(initialize_file, "r") as f_obj:
         reader = csv.reader(f_obj)
         rows = [row for row in reader]
     header, users = rows[0], rows[1:]
-    current_round.register_users(users)
+    n_registered = current_round.register_users(users)
+    logger.info(f"Registered {n_registered} users")
 
 
 @login_manager.user_loader
@@ -97,7 +73,8 @@ def wishes():
             form.link2.data,
             form.link3.data,
         ]
-        current_round.record_wishes(current_user.email, wishes, links)
+        n_wishes = current_round.record_wishes(current_user.email, wishes, links)
+        logger.info(f"Recorded {n_wishes} for user: {current_user.email}")
         return redirect(url_for("santa"))
 
     return render_template("wishes.html", form=form, user=current_user)
@@ -122,6 +99,7 @@ def login():
         user = current_round.get_user(user_email)
         if not user.check_password(password_data):
             flash("Invalid username or password!")
+            logger.info(f"Invalid credentials passed.  Username: {user_email}")
             return redirect(url_for("login", credential_error=True))
 
         login_user(user, remember=remember)
@@ -149,6 +127,7 @@ def set_own_password():
     if form.validate_on_submit():
         password = form.new_password.data
         current_round.set_user_password(current_user.email, password)
+        logger.info(f"Password successfully reset for {current_user.email}")
         return redirect(url_for("santa"))
 
     return render_template("set_own_password.html", form=form, user=current_user)
@@ -162,8 +141,8 @@ def account_recovery_request():
 
         email = form.email.data
         current_round.send_recovery_email(email)
+        logger.info(f"Account recovery email sent to {email}")
 
-        # TODO: Implement this template
         render_template("account_recovery_direction.html")
 
     return render_template("account_recovery_request.html", form=form, user=current_user)
@@ -199,6 +178,7 @@ def account_recovery():
         password1 = form.new_password.data
         password2 = form.new_password2.data
         current_round.set_user_password(current_user.email, password1)
+        logger.info(f"Password successfuly set for {current_user.email}")
         return redirect(url_for("santa"))
 
     return render_template("account_recovery.html", form=form, user=current_user)
@@ -233,7 +213,8 @@ def pairs():
     if not current_user.is_admin:
         return redirect(url_for("login"))
 
-    current_round.make_pairs()
+    n_pairs = current_round.make_pairs()
+    logger.info(f"Updated pairings for {n_pairs} users")
     return redirect(url_for("round_status"))
 
 
@@ -243,7 +224,9 @@ def kickoff():
     if not current_user.is_admin:
         return redirect(url_for("login"))
 
-    current_round.send_all_kickoff_email()
+    sent_emails = current_round.send_all_kickoff_email()
+    for email in sent_emails:
+        logger.info(f"Sent kickoff email to {email}")
     return redirect(url_for("round_status"))
 
 
