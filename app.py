@@ -9,7 +9,7 @@ from flask_login import LoginManager, current_user, login_user, logout_user, \
     login_required
 
 from forms import LoginForm, WishesForm, SetOwnPasswordForm, \
-    AccountRecoveryRequestForm, AccountRecoveryForm
+    AccountRecoveryRequestForm, AccountRecoveryForm, MakePairsForm, ExportForm
 from round import Round
 from app_token import secret_key, validate_token
 import elf_logger
@@ -178,7 +178,7 @@ def account_recovery():
         password1 = form.new_password.data
         password2 = form.new_password2.data
         current_round.set_user_password(current_user.email, password1)
-        logger.info(f"Password successfuly set for {current_user.email}")
+        logger.info(f"Password successfully set for {current_user.email}")
         return redirect(url_for("santa"))
 
     return render_template("account_recovery.html", form=form, user=current_user)
@@ -197,14 +197,36 @@ def santa():
     return render_template("santa.html", user=current_user)
 
 
-@app.route("/round_status")
+@app.route("/round_status", methods=["GET", "POST"])
 @login_required
 def round_status():
     if not current_user.is_admin:
         return redirect(url_for("login"))
 
     status_data = current_round.status()
-    return render_template("round_status.html", status_data=status_data)
+    n_pairs_set = sum([data["recipient_set"] for data in status_data.values()])
+    n_users = len(status_data)
+    if n_pairs_set != n_users and n_pairs_set != 0:
+        msg = f"Invalid round state found: {n_pairs_set} pairs set but {n_users} users total"
+        logger.warning(msg)
+        pairs_set = False
+    elif n_pairs_set == 0:
+        pairs_set = False
+    else:  # i.e. n_paris_set == n_users
+        pairs_set = True
+
+    pairs_form = MakePairsForm()
+    export_form = ExportForm()
+
+    if pairs_form.validate_on_submit():
+        return redirect(url_for("pairs"))
+
+    if export_form.validate_on_submit():  # TODO: Clicking this seems to make the pairs again
+        return redirect(url_for("export"))
+
+    return render_template("round_status.html", status_data=status_data,
+                           pairs_set=pairs_set, pairs_form=pairs_form,
+                           export_form=export_form, user=current_user)
 
 
 @app.route("/pairs")

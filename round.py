@@ -80,6 +80,7 @@ class Round:
             previous_recipients = {user.email: user.previous_recipient.email for user in users}
             user_names = list(partition.keys())
             pairs = make_pairs(user_names, partition, previous_recipients)
+            n_pairs = 0
             for left, right in pairs:
                 santa = (session
                          .query(User)
@@ -91,7 +92,7 @@ class Round:
                              .one())
                 santa.recipient = recipient
                 session.add(santa)
-            n_pairs = len(session.dirty)  # TODO: Test this
+                n_pairs += len(session.dirty)
             session.commit()
         return n_pairs
 

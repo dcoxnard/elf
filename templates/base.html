@@ -16,6 +16,9 @@
             <div>
                 <a href={{ url_for("set_own_password") }} >Reset Password</a>
                 <a href={{ url_for("logout") }} >Logout</a>
+                {% if user.is_admin %}
+                <a href={{ url_for("round_status") }}>Admin</a>
+                {% endif %}
             </div>
         {% endif %}
         <hr>

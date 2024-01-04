@@ -75,3 +75,11 @@ class AccountRecoveryForm(FlaskForm):
                                   validators=[InputRequired(), validate_new_passwords_match],
                                   filters=[strip_text])
     submit = SubmitField("Submit")
+
+
+class MakePairsForm(FlaskForm):
+    make_pairs = SubmitField("Make Pairs")
+
+
+class ExportForm(FlaskForm):
+    export = SubmitField("Export data as .csv")
