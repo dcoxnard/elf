@@ -7,7 +7,9 @@
             <div><p>{{ current_user.name }} says: <b>{{ wish.description }}</b></p></div>
         {% endfor %}
     {% else %}
-        <div><p>No wishes yet!</p></div>
+        <div class="page-detail">
+            <p>No wishes yet!</p>
+        </div>
 
         <form action="" method="post" novalidate>
             {{ form.hidden_tag() }}

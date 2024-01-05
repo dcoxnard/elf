@@ -6,22 +6,24 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='santa-hat.png') }}">
     </head>
     <body>
-        <div>
-            {% if user %}
-                Moody Secret Santa - {{ user.name }}
-            {% else %}
-                Moody Secret Santa
-            {% endif %}
-        </div>
-        {% if user %}
-            <div>
-                <a href={{ url_for("set_own_password") }} >Reset Password</a>
-                <a href={{ url_for("logout") }} >Logout</a>
-                {% if user.is_admin %}
-                <a href={{ url_for("round_status") }}>Admin</a>
+        <div class="header">
+            <div class="banner">
+                {% if user %}
+                    Moody Secret Santa - {{ user.name }}
+                {% else %}
+                    Moody Secret Santa
                 {% endif %}
             </div>
-        {% endif %}
+            {% if user %}
+                <div class="nav">
+                    <a class="nav-element" href={{ url_for("set_own_password") }} >Reset Password</a>
+                    <a class="nav-element" href={{ url_for("logout") }} >Logout</a>
+                    {% if user.is_admin %}
+                    <a class="nav-element" href={{ url_for("round_status") }}>Admin</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
         <hr>
         {% block content %}{% endblock %}
         <footer class="footer">

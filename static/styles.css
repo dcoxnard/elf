@@ -1,6 +1,35 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   color: #444;
+}
+
+h1 {
+  display: block;
+  margin: 10px;
+}
+
+form {
+  margin: 10px;
+}
+
+.wish-group {
+  margin: 10px;
+}
+
+.form-group {
+  margin: 3px;
+}
+
+.page-detail {
+  margin: 10px;
+}
+
+.footer {
+  margin-left: 50%;
+}
+
+.header {
+  margin: 10px;
 }
