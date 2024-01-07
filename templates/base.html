@@ -16,8 +16,16 @@
             </div>
             {% if user %}
                 <div class="nav">
-                    <a class="nav-element" href={{ url_for("set_own_password") }} >Reset Password</a>
+                    {% if user.is_autheticated %}
                     <a class="nav-element" href={{ url_for("logout") }} >Logout</a>
+                    {% else %}
+                    <a class="nav-element" href={{ url_for("login") }} >Login</a>
+                    {% endif %}
+
+                    {% if user.user_has_set_own_password %}
+                    <a class="nav-element" href={{ url_for("set_own_password") }} >Reset Password</a>
+                    {% endif %}
+
                     {% if user.is_admin %}
                     <a class="nav-element" href={{ url_for("round_status") }}>Admin</a>
                     {% endif %}

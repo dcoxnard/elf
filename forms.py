@@ -53,7 +53,7 @@ class SetOwnPasswordForm(FlaskForm):
     new_password2 = PasswordField("Confirm New Password",
                                   validators=[InputRequired(), validate_new_passwords_match],
                                   filters=[strip_text])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Set Password")
 
 
 # User does not know password
@@ -62,7 +62,7 @@ class AccountRecoveryRequestForm(FlaskForm):
     email = StringField("Your Email Address",
                         validators=[InputRequired(), Email()],
                         filters=[strip_text])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Send Email")
 
 
 # User resets PW, after authenticating via email link
@@ -74,7 +74,7 @@ class AccountRecoveryForm(FlaskForm):
     new_password2 = PasswordField("Confirm New Password",
                                   validators=[InputRequired(), validate_new_passwords_match],
                                   filters=[strip_text])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Set Password")
 
 
 class MakePairsForm(FlaskForm):
