@@ -52,7 +52,6 @@ print(result)
 ## TODO
 - Styling
 - Navigation
-- Logging
 - Uncouple the expiration time messages - put in app config
 - Upload image
 - app's Round() should live as a session variable
