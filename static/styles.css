@@ -12,10 +12,6 @@ h1 {
   font-weight: normal;
 }
 
-form {
-  margin: 10px;
-}
-
 .wish-group {
   margin: 10px;
 }
@@ -113,4 +109,23 @@ form {
   padding: 20px;
   border-radius: 2%;
   box-shadow: 8px 8px 2px 1px #ccc
+}
+
+.btn {
+  border: 2px solid black;
+  padding: 10px 20px;
+  font-family: Arial, sans-serif;
+  color: #444;
+  font-size: 16px;
+  margin: 10px;
+}
+
+.btn:disabled {
+  color: #999;
+  border: 2px solid #999;
+}
+
+.btn:hover {
+  background-color: #000;
+  color: #fff;
 }
