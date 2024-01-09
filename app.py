@@ -203,6 +203,9 @@ def round_status():
     if not current_user.is_admin:
         return redirect(url_for("login"))
 
+    if not current_user.user_has_set_own_password:
+        return redirect(url_for("login"))
+
     status_data = current_round.status()
     n_pairs_set = sum([data["recipient_set"] for data in status_data.values()])
     n_users = len(status_data)
