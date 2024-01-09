@@ -17,8 +17,13 @@
         {% set progress_class = 'progress-completed' %}
     {% endif %}
 
-    <li class="user-status-data {{ progress_class }}">
-    <h2>User: {{ user_email }}</h2>
+    <li class="user-status-data">
+    <div class="card-header">
+        <div class="progress-icon-container">
+            <div class="progress-icon {{ progress_class }}">&nbsp;</div>
+        </div>
+        <p>{{ user_email }}</p>
+    </div>
     {% for key, value in user_data.items() %}
         {% if key != "communications" %}
             <p>{{ key }}:  {{ value }}</p>
@@ -35,17 +40,21 @@
 {% endfor %}
 </div>
 
-<div>
-    <form action="/pairs" method="get" novalidate>
-        {{ pairs_form.hidden_tag() }}
-        {{ pairs_form.make_pairs(class="btn btn-make-pairs", disabled=pairs_set) }}
-    </form>
+<div class="admin-actions">
+    <h1>Admin Actions</h1>
+    <div>
+        <form action="/pairs" method="get" novalidate>
+            {{ pairs_form.hidden_tag() }}
+            {{ pairs_form.make_pairs(class="btn btn-make-pairs", disabled=pairs_set) }}
+        </form>
+    </div>
+    <div>
+        <form action="/export" method="get" novalidate>
+            {{ export_form.hidden_tag() }}
+            {{ export_form.export(class="btn btn-export") }}
+        </form>
+    </div>
 </div>
-<div>
-    <form action="/export" method="get" novalidate>
-        {{ export_form.hidden_tag() }}
-        {{ export_form.export(class="btn btn-export") }}
-    </form>
-</div>
+
 
 {% endblock %}

@@ -75,6 +75,33 @@ form {
   text-decoration-line: underline;
 }
 
+.progress-icon-container {
+  padding: 0 10px;
+  display: flex;
+  justify-content: center
+}
+
+.progress-icon {
+  margin: auto 0;
+  border: 1px solid #333;
+}
+
+.progress-not-started {
+  background-color: red;
+}
+.progress-in-progress {
+  background-color: yellow;
+}
+.progress-completed {
+  background-color: green;
+}
+
+.card-header {
+  font-size: 22px;
+  font-weight: bold;
+  display: inline-flex;
+}
+
 .status-data {
   display: inline-grid;
 }
