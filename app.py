@@ -221,12 +221,6 @@ def round_status():
     pairs_form = MakePairsForm()
     export_form = ExportForm()
 
-    if pairs_form.validate_on_submit():
-        return redirect(url_for("pairs"))
-
-    if export_form.validate_on_submit():  # TODO: Clicking this seems to make the pairs again
-        return redirect(url_for("export"))
-
     return render_template("round_status.html", status_data=status_data,
                            pairs_set=pairs_set, pairs_form=pairs_form,
                            export_form=export_form, user=current_user)
@@ -261,7 +255,7 @@ def export():
     if not current_user.is_admin:
         return redirect(url_for("login"))
 
-    export_data = current_user.export_for_next_round()
+    export_data = current_round.export_for_next_round()
     lines = StringIO()
     writer = csv.writer(lines)
     writer.writerows(export_data)

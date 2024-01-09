@@ -34,13 +34,13 @@
 {% endfor %}
 
 <div>
-    <form action="" method="post" novalidate>
+    <form action="/pairs" method="get" novalidate>
         {{ pairs_form.hidden_tag() }}
         {{ pairs_form.make_pairs(class="btn btn-make-pairs", disabled=pairs_set) }}
     </form>
 </div>
 <div>
-    <form action="" method="post" novalidate>
+    <form action="/export" method="get" novalidate>
         {{ export_form.hidden_tag() }}
         {{ export_form.export(class="btn btn-export") }}
     </form>

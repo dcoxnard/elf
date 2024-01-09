@@ -268,7 +268,7 @@ class Round:
             "image",
             "previous_recipient",
             "is_admin",
-            "temporary_password"
+            "next_temporary_password"
         ]
         data = [header]
         with Session(self.engine) as session:
