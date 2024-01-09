@@ -3,6 +3,7 @@
 {% block content %}
 <h1>Round Status</h1>
 
+<div class="status-data">
 {% for user_email, user_data in status_data.items() %}
 
     {% set user_has_set_own_password = user_data["user_has_set_own_password"] %}
@@ -16,7 +17,7 @@
         {% set progress_class = 'progress-completed' %}
     {% endif %}
 
-    <div class="user-status-data {{ progress_class }}">
+    <li class="user-status-data {{ progress_class }}">
     <h2>User: {{ user_email }}</h2>
     {% for key, value in user_data.items() %}
         {% if key != "communications" %}
@@ -29,9 +30,10 @@
             <p>{{ key }}:  {{ value }}</p>
         {% endfor %}
     {% endfor %}
-    </div>
+    </li>
 
 {% endfor %}
+</div>
 
 <div>
     <form action="/pairs" method="get" novalidate>

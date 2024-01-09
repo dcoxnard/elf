@@ -15,9 +15,9 @@
                     Moody Secret Santa
                 {% endif %}
             </div>
+            <div class="nav">
             {% if user %}
-                <div class="nav">
-                    {% if user.is_autheticated %}
+                    {% if user.is_authenticated %}
                     <li class="nav-element-item">
                         <a class="nav-link" href={{ url_for("logout") }} >Logout</a>
                     </li>
@@ -38,8 +38,12 @@
                     <a class="nav-link" href={{ url_for("round_status") }}>Admin</a>
                     </li>
                     {% endif %}
-                </div>
+            {% else %}
+                <li class="nav-element-item">
+                    <a class="nav-link" href={{ url_for("login") }} >Login</a>
+                </li>
             {% endif %}
+            </div>
         </div>
 <!--        <hr>-->
         {% block content %}{% endblock %}

@@ -74,3 +74,18 @@ form {
 .nav-link:hover {
   text-decoration-line: underline;
 }
+
+.status-data {
+  display: flex
+  flex-direction: column;
+}
+
+.user-status-data {
+  list-style: none;
+  border: 1px solid #000;
+  display: inline-block;
+}
+
+.user-status-data:after {
+  content: "\A";
+}
