@@ -21,21 +21,6 @@
 
             <div class="nav">
             {% if user %}
-                    {% if user.is_authenticated %}
-                    <li class="nav-element-item {{ active_tab_class if active_tab == 'logout' }}">
-                        <a class="nav-link" href={{ url_for("logout") }} >Logout</a>
-                    </li>
-                    {% else %}
-                    <li class="nav-element-item {{ active_tab_class if active_tab == 'login' }}">
-                    <a class="nav-link" href={{ url_for("login") }} >Login</a>
-                    </li>
-                    {% endif %}
-
-                    {% if user.is_authenticated and user.user_has_set_own_password %}
-                    <li class="nav-element-item {{ active_tab_class if active_tab == 'set_own_password' }}">
-                    <a class="nav-link" href={{ url_for("set_own_password") }} >Reset Password</a>
-                    </li>
-                    {% endif %}
 
                     {% if user.is_authenticated and user.n_wishes() > 0 %}
                     <li class="nav-element-item {{ active_tab_class if active_tab == 'santa' }}">
@@ -52,8 +37,24 @@
                     <a class="nav-link" href={{ url_for("round_status") }}>Admin</a>
                     </li>
                     {% endif %}
+
+                    {% if user.is_authenticated and user.user_has_set_own_password %}
+                    <li class="nav-element-item {{ active_tab_class if active_tab == 'set_own_password' }} nav-bar-right">
+                        <a class="nav-link" href={{ url_for("set_own_password") }} >Reset Password</a>
+                    </li>
+                    {% endif %}
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-element-item {{ active_tab_class if active_tab == 'logout' }}">
+                        <a class="nav-link" href={{ url_for("logout") }} >Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-element-item {{ active_tab_class if active_tab == 'login' }} nav-bar-right">
+                        <a class="nav-link" href={{ url_for("login") }} >Login</a>
+                    </li>
+                    {% endif %}
             {% else %}
-                <li class="nav-element-item {{ active_tab_class if active_tab == 'login'}} ">
+                <li class="nav-element-item {{ active_tab_class if active_tab == 'login'}} nav-bar-right">
                     <a class="nav-link" href={{ url_for("login") }} >Login</a>
                 </li>
             {% endif %}

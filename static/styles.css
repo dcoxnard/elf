@@ -130,7 +130,7 @@ h1 {
   border: 2px solid #000;
   margin: 20px;
   padding: 20px;
-  border-radius: 2%;
+  border-radius: 10px;
   box-shadow: 8px 8px 2px 1px #ccc;
 }
 
@@ -175,7 +175,7 @@ h1 {
   border: 2px solid #000;
   margin: 20px;
   padding: 20px;
-  border-radius: 2%;
+  border-radius: 10px;
   box-shadow: 8px 8px 2px 1px #ccc;
   max-width: 30%;
 }
@@ -200,10 +200,14 @@ h1 {
 .active-element {
   background-color: #555;
   color: #fff;
-  border-top-left-radius: 15%;
-  border-top-right-radius: 15%;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 .active-element .nav-link {
   color: #fff;
+}
+
+.nav-bar-right {
+  margin: 0 0 0 auto;
 }

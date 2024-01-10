@@ -118,7 +118,7 @@ def login():
 
     error = request.args.get("credential_error", False)
     return render_template("login.html", title='Sign In', form=form,
-                           error=error, active_tab="login")
+                           error=error)
 
 
 @app.route("/set_own_password", methods=["GET", "POST"])
