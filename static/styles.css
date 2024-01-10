@@ -78,13 +78,13 @@ h1 {
 .nav-element-item {
   list-style: none;
   text-align: inline;
-  padding-left: 10px;
+  padding-left: 30px;
   padding-right: 30px;
 }
 
 .nav-link {
   display: inline-block;
-  padding: 24px 0;
+  padding: 20px 0px 15px 0px;
   text-decoration: none;
   color: #555;
 }
@@ -200,6 +200,8 @@ h1 {
 .active-element {
   background-color: #555;
   color: #fff;
+  border-top-left-radius: 15%;
+  border-top-right-radius: 15%;
 }
 
 .active-element .nav-link {
