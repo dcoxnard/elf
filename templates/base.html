@@ -26,13 +26,13 @@
                     <li class="nav-element-item {{ active_tab_class if active_tab == 'santa' }}">
                         <a class="nav-link" href={{ url_for("santa") }} >View Wishes</a>
                     </li>
-                    {% elif user.is_authenticated %}
+                    {% elif user.is_authenticated and user.user_has_set_own_password %}
                     <li class="nav-element-item {{ active_tab_class if active_tab == 'wishes' }}">
                         <a class="nav-link" href={{ url_for("wishes") }} >Set Wishes</a>
                     </li>
                     {% endif %}
 
-                    {% if user.is_admin %}
+                    {% if user.is_admin and user.user_has_set_own_password %}
                     <li class="nav-element-item {{ active_tab_class if active_tab == 'admin' }}">
                     <a class="nav-link" href={{ url_for("round_status") }}>Admin</a>
                     </li>

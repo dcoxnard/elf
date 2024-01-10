@@ -162,6 +162,10 @@ h1 {
   padding: 10px;
 }
 
+.set-new-pw-form {
+  padding: 10px;
+}
+
 .greeting {
   margin: 20px 30px 40px 30px;
 }
@@ -194,7 +198,7 @@ h1 {
 
 .alert-error {
   color: red;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .active-element {
@@ -210,4 +214,9 @@ h1 {
 
 .nav-bar-right {
   margin: 0 0 0 auto;
+}
+
+.wish-link {
+  margin-top: 10px;
+  font-style: italic;
 }

@@ -19,7 +19,7 @@
                 </div>
                 {% if wish.link %}
                 <div class="wish wish-link">
-                    ({{ wish.link }})
+                    <a target="_blank" rel="noopener noreferrer" href="{{ wish.link }}">{{ wish.link }}</a>
                 </div>
                 {% endif %}
             </div>
@@ -42,7 +42,7 @@
                     </div>
                     {% if wish.link %}
                     <div class="wish wish-link">
-                        ({{ wish.link }})
+                        <a target="_blank" rel="noopener noreferrer" href="{{ wish.link }}">{{ wish.link }}</a>
                     </div>
                     {% endif %}
                 </div>

@@ -2,22 +2,24 @@
 
 {% block content %}
 <h1>Set New Password</h1>
-<form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-        <div class="alert alert-error">
-            {{ "".join(form.new_password.errors) }}
+<div class="set-new-pw-form">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <div class="alert alert-error">
+                {{ "".join(form.new_password.errors) }}
+            </div>
+            {{ form.new_password(size=32, placeholder=form.new_password.label.text, class="form-input") }}
         </div>
-        {{ form.new_password(size=32, placeholder=form.new_password.label.text) }}
-    </div>
-    <div class="form-group">
-        <div class="alert alert-error">
-            {{ "".join(form.new_password2.errors) }}
+        <div class="form-group">
+            <div class="alert alert-error">
+                {{ "".join(form.new_password2.errors) }}
+            </div>
+            {{ form.new_password2(size=32, placeholder=form.new_password2.label.text, class="form-input") }}
         </div>
-        {{ form.new_password2(size=32, placeholder=form.new_password2.label.text) }}
-    </div>
-    <div class="form-group">
-        {{ form.submit() }}
-    </div>
-</form>
+        <div class="form-group">
+            {{ form.submit(class="btn") }}
+        </div>
+    </form>
+</div>
 {% endblock %}
