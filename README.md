@@ -55,4 +55,5 @@ print(result)
 - app's Round() should live as a session variable
 - Uncoupled user-loader that can be reused by eg flask-login, wtform pw validation, etc.
 - More reliable round-registration from export
-- admin button for kickoff
+- list out communications on admin panel
+- admin button for kickoff, send reminder email
