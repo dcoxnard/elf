@@ -8,8 +8,8 @@
         <div class="alert alert-error">
             {{ "".join(form.email.errors) }}
         </div>
-        {{ form.email(size=32, placeholder=form.email.label.text) }}
+        {{ form.email(size=32, placeholder=form.email.label.text, class="form-input") }}
     </div>
-    <p>{{ form.submit() }}</p>
+    <p>{{ form.submit(class="btn") }}</p>
 </form>
 {% endblock %}

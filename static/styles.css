@@ -180,6 +180,18 @@ h1 {
   max-width: 30%;
 }
 
+@media screen and (max-width: 960px) {
+ .wish-group {
+   max-width: 100%;
+ }
+ .status-data {
+   width: 100%;
+ }
+ .footer {
+   margin: 0% 30%;
+ }
+}
+
 .alert-error {
   color: red;
   font-size: 18px;
