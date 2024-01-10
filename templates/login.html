@@ -2,36 +2,38 @@
 
 {% block content %}
 <h1>Sign In</h1>
-<form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-        {% if error %}
-        <div class="alert alert-error">
-            Username or Password not found.
+<div class="login-form">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {% if error %}
+            <div class="alert alert-error">
+                Username or Password not found.
+            </div>
+            {% endif %}
+            <div class="alert alert-error">
+                {{ "".join(form.username.errors) }}
+            </div>
+                {{ form.username(size=32, placeholder=form.username.label.text, class="form-control form-input") }}
         </div>
-        {% endif %}
-        <div class="alert alert-error">
-            {{ "".join(form.username.errors) }}
+
+        <div class="form-group">
+            <div class="alert alert-error">
+                {{ "".join(form.password.errors) }}
+            </div>
+                {{ form.password(size=32, placeholder=form.password.label.text, class="form-control form-input") }}
         </div>
-            {{ form.username(size=32, placeholder=form.username.label.text, class="form-control") }}
-    </div>
 
-    <div class="form-group">
-        <div class="alert alert-error">
-            {{ "".join(form.password.errors) }}
+        <div class="form-group">
+            {{ form.remember_me() }} {{ form.remember_me.label(class="form-control") }}
         </div>
-            {{ form.password(size=32, placeholder=form.password.label.text, class="form-control") }}
-    </div>
 
-    <div class="form-group">
-        {{ form.remember_me() }} {{ form.remember_me.label(class="form-control") }}
-    </div>
-
-    <div class="form-group">
-        {{ form.submit(class="btn btn-submit") }}
-    </div>
-    <div class="password-reset">
-        <a href="{{ url_for('account_recovery_request') }}">Forgot your password?</a>
-    </div>
-</form>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-submit") }}
+        </div>
+        <div class="password-reset">
+            <a href="{{ url_for('account_recovery_request') }}">Forgot your password?</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

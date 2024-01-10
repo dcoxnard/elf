@@ -32,11 +32,10 @@
     </div>
     {% endif %}
 
-
     <div class="wish-content wish-content-user">
         Here are the things you wished for:
         {% for wish in current_user.wishes %}
-            <div class="wish-group">
+            <li class="wish-group">
                 <div class="wish">
                     <div class="wish wish-description">
                         {{ wish.description }}
@@ -47,7 +46,7 @@
                     </div>
                     {% endif %}
                 </div>
-            </div>
+            </li>
         {% endfor %}
     </div>
 

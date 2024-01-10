@@ -17,7 +17,29 @@ h1 {
 }
 
 .form-group {
-  margin: 3px;
+  margin: 10px;
+}
+
+.form-input {
+  height: 30px;
+  border: 2px solid black;
+  padding: 10px 20px;
+  font-family: Arial, sans-serif;
+  color: #444;
+  font-size: 16px;
+}
+
+.form-input:focus {
+  border-radius: 0%;
+}
+
+.wish-group {
+  margin-bottom: 30px;
+}
+
+.wish-group .form-input {
+  width: 90%;
+  border: 1px solid #ccc;
 }
 
 .page-detail {
@@ -100,15 +122,16 @@ h1 {
 
 .status-data {
   display: inline-grid;
+  width: 30%;
 }
 
 .user-status-data {
   list-style: none;
   border: 2px solid #000;
-  margin: 10px;
+  margin: 20px;
   padding: 20px;
   border-radius: 2%;
-  box-shadow: 8px 8px 2px 1px #ccc
+  box-shadow: 8px 8px 2px 1px #ccc;
 }
 
 .btn {
@@ -120,12 +143,44 @@ h1 {
   margin: 10px;
 }
 
+.btn:hover:enabled {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn:active:enabled {
+  background-color: buttonface;
+  color: #444;
+}
+
 .btn:disabled {
   color: #999;
   border: 2px solid #999;
 }
 
-.btn:hover {
-  background-color: #000;
-  color: #fff;
+.login-form {
+  padding: 10px;
+}
+
+.greeting {
+  margin: 20px 30px 40px 30px;
+}
+
+.wish-content {
+  margin: 20px 30px 40px 30px;
+}
+
+.wish-group {
+  list-style: none;
+  border: 2px solid #000;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 2%;
+  box-shadow: 8px 8px 2px 1px #ccc;
+  max-width: 30%;
+}
+
+.alert-error {
+  color: red;
+  font-size: 18px;
 }

@@ -57,3 +57,4 @@ print(result)
 - Uncoupled user-loader that can be reused by eg flask-login, wtform pw validation, etc.
 - More reliable round-registration from export
 - Mock email sender
+- Nav element to navigate back to wishes/santa from aux views
