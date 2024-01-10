@@ -77,7 +77,8 @@ def wishes():
         logger.info(f"Recorded {n_wishes} for user: {current_user.email}")
         return redirect(url_for("santa"))
 
-    return render_template("wishes.html", form=form, user=current_user)
+    return render_template("wishes.html", form=form, user=current_user,
+                           active_tab="wishes")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -117,7 +118,7 @@ def login():
 
     error = request.args.get("credential_error", False)
     return render_template("login.html", title='Sign In', form=form,
-                           error=error)
+                           error=error, active_tab="login")
 
 
 @app.route("/set_own_password", methods=["GET", "POST"])
@@ -130,7 +131,8 @@ def set_own_password():
         logger.info(f"Password successfully reset for {current_user.email}")
         return redirect(url_for("santa"))
 
-    return render_template("set_own_password.html", form=form, user=current_user)
+    return render_template("set_own_password.html", form=form,
+                           user=current_user, active_tab="set_own_password")
 
 
 # https://www.freecodecamp.org/news/setup-email-verification-in-flask-app/
@@ -194,7 +196,7 @@ def santa():
     if current_user.n_wishes() == 0:
         return redirect(url_for("wishes"))
 
-    return render_template("santa.html", user=current_user)
+    return render_template("santa.html", user=current_user, active_tab="santa")
 
 
 @app.route("/round_status", methods=["GET", "POST"])
@@ -223,7 +225,8 @@ def round_status():
 
     return render_template("round_status.html", status_data=status_data,
                            pairs_set=pairs_set, pairs_form=pairs_form,
-                           export_form=export_form, user=current_user)
+                           export_form=export_form, user=current_user,
+                           active_tab="admin")
 
 
 @app.route("/pairs")

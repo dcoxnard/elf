@@ -15,41 +15,44 @@
                     Moody Secret Santa
                 {% endif %}
             </div>
+
+            {% set active_tab_class = "active-element" %}
+
             <div class="nav">
             {% if user %}
                     {% if user.is_authenticated %}
-                    <li class="nav-element-item">
+                    <li class="nav-element-item {{ active_tab_class if active_tab == 'logout' }}">
                         <a class="nav-link" href={{ url_for("logout") }} >Logout</a>
                     </li>
                     {% else %}
-                    <li class="nav-element-item">
+                    <li class="nav-element-item {{ active_tab_class if active_tab == 'login' }}">
                     <a class="nav-link" href={{ url_for("login") }} >Login</a>
                     </li>
                     {% endif %}
 
                     {% if user.user_has_set_own_password %}
-                    <li class="nav-element-item">
+                    <li class="nav-element-item {{ active_tab_class if active_tab == 'set_own_password' }}">
                     <a class="nav-link" href={{ url_for("set_own_password") }} >Reset Password</a>
                     </li>
                     {% endif %}
 
                     {% if user.n_wishes() > 0 %}
-                    <li class="nav-element-item">
+                    <li class="nav-element-item {{ active_tab_class if active_tab == 'santa' }}">
                         <a class="nav-link" href={{ url_for("santa") }} >View Wishes</a>
                     </li>
                     {% else %}
-                    <li class="nav-element-item">
+                    <li class="nav-element-item {{ active_tab_class if active_tab == 'wishes' }}">
                         <a class="nav-link" href={{ url_for("wishes") }} >Set Wishes</a>
                     </li>
                     {% endif %}
 
                     {% if user.is_admin %}
-                    <li class="nav-element-item">
+                    <li class="nav-element-item {{ active_tab_class if active_tab == 'admin' }}">
                     <a class="nav-link" href={{ url_for("round_status") }}>Admin</a>
                     </li>
                     {% endif %}
             {% else %}
-                <li class="nav-element-item">
+                <li class="nav-element-item {{ active_tab_class if active_tab == 'login'}} ">
                     <a class="nav-link" href={{ url_for("login") }} >Login</a>
                 </li>
             {% endif %}

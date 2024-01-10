@@ -58,3 +58,4 @@ print(result)
 - More reliable round-registration from export
 - Mock email sender
 - Nav element to navigate back to wishes/santa from aux views
+- admin button for kickoff

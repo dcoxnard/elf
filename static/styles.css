@@ -78,8 +78,8 @@ h1 {
 .nav-element-item {
   list-style: none;
   text-align: inline;
-  margin-left: 10px;
-  margin-right: 30px;
+  padding-left: 10px;
+  padding-right: 30px;
 }
 
 .nav-link {
@@ -183,4 +183,13 @@ h1 {
 .alert-error {
   color: red;
   font-size: 18px;
+}
+
+.active-element {
+  background-color: #555;
+  color: #fff;
+}
+
+.active-element .nav-link {
+  color: #fff;
 }
