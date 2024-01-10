@@ -1,4 +1,5 @@
 import os
+from email.message import EmailMessage
 
 from sqlalchemy.orm import Session
 
@@ -6,7 +7,7 @@ from make_pairs import make_pairs
 from models import User, Wish, Communication, CommunicationKind, \
     CommunicationStatus, make_temp_password
 from db import engine, db_path
-from mail_api import MailApi, ADMIN_ADDR
+from mail import ADMIN_ADDR, MockSender
 import messages
 from app_token import generate_token
 
@@ -19,6 +20,7 @@ class Round:
     """
 
     engine = engine
+    mailer = MockSender
 
     def __init__(self):
 
@@ -131,13 +133,17 @@ class Round:
             session.add(user)
             session.commit()
 
-    @staticmethod
-    def send_email(user_email, subject_line, message):
-        mailer = MailApi()
-        from_ = ADMIN_ADDR
+    def send_email(self, user_email, subject_line, message):
+        email = EmailMessage()
+        email["From"] = ADMIN_ADDR
+        email["To"] = user_email
+        email["Subject"] = subject_line
+        email.set_content(message)
+
+        mailer = self.mailer()
+        mailer.set_email_message(email)
         try:
-            mailer.send_email(from_=from_, to_=user_email,
-                              subject_line=subject_line, message_body=message)
+            mailer.send_email_message()
         except Exception as e:
             status = CommunicationStatus.ERROR
             detail = str(e)
@@ -156,7 +162,7 @@ class Round:
             session.commit()
 
     def send_kickoff_email(self, name, user_email, password):
-        url = "localhost:5000/"
+        url = "localhost:5000"
         kickoff_message = messages.kickoff_message.format(name=name,
                                                           email=user_email,
                                                           password=password,
@@ -185,7 +191,8 @@ class Round:
         return sent_emails
 
     def send_reminder_email(self, name, user_email):
-        reminder_message = messages.reminder_message.format(name=name,
+        url = "localhost:5000"
+        reminder_message = messages.reminder_message.format(url=url, name=name,
                                                             email=user_email)
         status, detail = self.send_email(user_email,
                                          messages.reminder_subject_line,
@@ -208,13 +215,15 @@ class Round:
                 self.send_reminder_email(name, email)
 
     def send_recovery_email(self, user_email):
+        url = "localhost:5000"
         with Session(self.engine) as session:
             name = (session
                     .query(User.name)
                     .where(User.email == user_email)
                     .one())[0]
         token = generate_token(user_email)
-        recovery_message = messages.account_recovery_message.format(name=name,
+        recovery_message = messages.account_recovery_message.format(url=url,
+                                                                    name=name,
                                                                     token=token)
         status, detail = self.send_email(user_email,
                                          messages.account_recovery_subject_line,
@@ -297,16 +306,20 @@ class Round:
 if __name__ == "__main__":
     round = Round()
 
-    import csv
-
-    with open("sample_users.csv", "r") as f_obj:
-        reader = csv.reader(f_obj)
-        rows = [row for row in reader]
-
-    header, users = rows[0], rows[1:]
-    round.register_users(users)
-
-    from pprint import pprint
-    pprint(round.status())
+    # import csv
+    #
+    # with open("sample_users.csv", "r") as f_obj:
+    #     reader = csv.reader(f_obj)
+    #     rows = [row for row in reader]
+    #
+    # header, users = rows[0], rows[1:]
+    # round.register_users(users)
+    #
+    # from pprint import pprint
+    # pprint(round.status())
 
     # round.export_for_next_round()
+
+    round.send_kickoff_email("Alice", "alice@gmail.com", "otbnoirnborin")
+    round.send_reminder_email("Alice", "alice@gmail.com")
+    round.send_recovery_email("alice@gmail.com")

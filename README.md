@@ -50,12 +50,9 @@ print(result)
 ```
 
 ## TODO
-- Styling
 - Uncouple the expiration time messages - put in app config
 - Upload image
 - app's Round() should live as a session variable
 - Uncoupled user-loader that can be reused by eg flask-login, wtform pw validation, etc.
 - More reliable round-registration from export
-- Mock email sender
-- Nav element to navigate back to wishes/santa from aux views
 - admin button for kickoff
