@@ -257,6 +257,7 @@ class Round:
                 for comm in communications:
                     data = dict()
                     for attr in [
+                        "communication_id",
                         "kind",
                         "status",
                         "detail",

@@ -29,12 +29,6 @@
             <p>{{ key }}:  {{ value }}</p>
         {% endif %}
     {% endfor %}
-
-    {% for comm in user_data["communications"] %}
-        {% for key, value in comm.items() %}
-            <p>{{ key }}:  {{ value }}</p>
-        {% endfor %}
-    {% endfor %}
     </li>
 
 {% endfor %}
@@ -56,5 +50,17 @@
     </div>
 </div>
 
+<div class="communications">
+    <h1>Communications</h1>
+    {% for user_email, user_data in status_data.items() %}
+        {% for key, value in user_data.items() %}
+            {% if key == "communications" %}
+                <li>
+                <p>{{ key }}:  {{ value }}</p>
+                </li>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</div>
 
 {% endblock %}
