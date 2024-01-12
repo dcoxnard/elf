@@ -43,15 +43,11 @@ class Round:
 
         with Session(self.engine) as session:
             # TODO: depends on correct ordering in input
-            for email, name, family, password, _ in users:
+            for email, name, family, password, is_admin, _ in users:
                 email = email.lower()
-                if email == ADMIN_ADDR:
-                    user = User(email=email, name=name, family=family,
-                                temporary_password=password,
-                                is_admin=True)
-                else:
-                    user = User(email=email, name=name, family=family,
-                                temporary_password=password)
+                user = User(email=email, name=name, family=family,
+                            temporary_password=password,
+                            is_admin=is_admin)
                 user.set_password(password, user_has_set=False)
                 session.add(user)
             n_users = len(session.new)
@@ -302,6 +298,28 @@ class Round:
                 row.append(temp_pw)
                 data.append(row)
         return data
+
+    def import_from_previous_round(self, export_data):
+        header = [
+            "email",
+            "name",
+            "family",
+            "image",
+            "previous_recipient",
+            "is_admin",
+            "next_temporary_password"
+        ]
+        assert all([d == h for d, h in zip(export_data[0], header)])
+
+        # Reshape for self.register_users
+        # TODO: A lot of this shouldn't be necessary
+        user_data = []
+        for data in export_data[1:]:
+            email, name, family, image, previous_recipient_email, is_admin, \
+                password = data
+            user_data.append([email, name, family, password, is_admin,
+                              previous_recipient_email])
+        self.register_users(user_data)
 
 
 if __name__ == "__main__":

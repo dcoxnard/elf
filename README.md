@@ -52,8 +52,8 @@ print(result)
 ## TODO
 - Uncouple the expiration time messages - put in app config
 - Upload image
-- app's Round() should live as a session variable
 - Uncoupled user-loader that can be reused by eg flask-login, wtform pw validation, etc.
-- More reliable round-registration from export
+- change sample_users schema to align with the `export` method
+- unit tests for cases where people have been added/removed
 - list out communications on admin panel
 - admin button for kickoff, send reminder email
