@@ -248,23 +248,44 @@ class Round:
                 ]:
                     user_data[method] = getattr(user, method).__call__()
 
-                communications = sorted(user.communications, key=lambda c: c.timestamp)
-                communications_data = []
-                for comm in communications:
-                    data = dict()
-                    for attr in [
-                        "communication_id",
-                        "kind",
-                        "status",
-                        "detail",
-                        "timestamp"
-                    ]:
-                        data[attr] = getattr(comm, attr)
-                    communications_data.append(data)
-                user_data["communications"] = communications_data
+                # communications = sorted(user.communications, key=lambda c: c.timestamp)
+                # communications_data = []
+                # for comm in communications:
+                #     data = dict()
+                #     for attr in [
+                #         "communication_id",
+                #         "kind",
+                #         "status",
+                #         "detail",
+                #         "timestamp"
+                #     ]:
+                #         data[attr] = getattr(comm, attr)
+                #     communications_data.append(data)
+                # user_data["communications"] = communications_data
 
                 status_data[user.email] = user_data
         return status_data
+
+    def communications(self):
+        with Session(self.engine) as session:
+            communications = (session
+                     .query(Communication)
+                     .order_by(Communication.timestamp)
+                     .all())
+            communications_data = []
+            for comm in communications:
+                data = dict()
+                for attr in [
+                    "communication_id",
+                    "user_email",
+                    "kind",
+                    "status",
+                    "detail",
+                    "timestamp"
+                ]:
+                    data[attr] = getattr(comm, attr)
+                communications_data.append(data)
+        return communications_data
 
     def export_for_next_round(self):
         header = [

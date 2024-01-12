@@ -209,6 +209,7 @@ def round_status():
         return redirect(url_for("login"))
 
     status_data = current_round.status()
+    communications = current_round.communications()
     n_pairs_set = sum([data["recipient_set"] for data in status_data.values()])
     n_users = len(status_data)
     if n_pairs_set != n_users and n_pairs_set != 0:
@@ -224,9 +225,9 @@ def round_status():
     export_form = ExportForm()
 
     return render_template("round_status.html", status_data=status_data,
-                           pairs_set=pairs_set, pairs_form=pairs_form,
-                           export_form=export_form, user=current_user,
-                           active_tab="admin")
+                           communications=communications, pairs_set=pairs_set,
+                           pairs_form=pairs_form, export_form=export_form,
+                           user=current_user, active_tab="admin")
 
 
 @app.route("/pairs")
