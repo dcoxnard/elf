@@ -20,6 +20,10 @@ ADMIN_ADDR = os.environ["ADMIN_ADDR"]
 
 class EmailSender(abc.ABC):
 
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(level=logging.DEBUG)
+    logger.setLevel(logging.DEBUG)
+
     def __init__(self):
         self.email = None
 
@@ -33,7 +37,7 @@ class EmailSender(abc.ABC):
 
 class GmailSender(EmailSender):
 
-    def send_message(self):
+    def send_email_message(self):
         """Create and send an email message
         Print the returned  message id
         Returns: Message object, including message id
@@ -68,10 +72,6 @@ class GmailSender(EmailSender):
 
 class MockSender(EmailSender):
 
-    logger = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.DEBUG)
-    logger.setLevel(logging.DEBUG)
-
     def send_email_message(self):
         msg = f"""
         SENDING EMAIL
@@ -86,4 +86,6 @@ MESSAGE: {self.email.get_payload()}
 class ErrorSender(EmailSender):
 
     def send_email_message(self):
-        raise RuntimeError("This is a mock error!")
+        msg = "This is a mock error!"
+        self.logger.info(msg)
+        raise RuntimeError(msg)

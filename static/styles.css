@@ -201,6 +201,19 @@ h1 {
   font-size: 14px;
 }
 
+.alert-success {
+  color: green;
+  font-size: 14px;
+}
+
+.comm-detail {
+  font-size: 14px;
+}
+
+.communication {
+  list-style: none;
+}
+
 .active-element {
   background-color: #555;
   color: #fff;

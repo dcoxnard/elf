@@ -53,7 +53,16 @@
     {% for communication in communications %}
         <li class="communication">
             {% for key, value in communication.items() %}
-            <p>{{ key }}:  {{ value }}</p>
+
+            {% if key == "status" and value.value == "success" %}
+                {% set detail_class = 'comm-detail alert alert-success' %}
+            {% elif key == "status" and value.value == "error" %}
+                {% set detail_class = 'comm-detail alert alert-error' %}
+            {% else %}
+                {% set detail_class = 'comm-detail' %}
+            {% endif %}
+
+            <p class="{{ detail_class }}">{{ key }}:  {{ value }}</p>
             {% endfor %}
         </li>
     {% endfor %}
