@@ -41,6 +41,18 @@
         </form>
     </div>
     <div>
+        <form action="/kickoff" method="get" novalidate>
+            {{ kickoff_form.hidden_tag() }}
+            {{ kickoff_form.send_kickoff(class="btn btn-send-kickoff") }}
+        </form>
+    </div>
+    <div>
+        <form action="/reminder" method="get" novalidate>
+            {{ reminder_form.hidden_tag() }}
+            {{ reminder_form.send_reminder(class="btn btn-send-reminder") }}
+        </form>
+    </div>
+    <div>
         <form action="/export" method="get" novalidate>
             {{ export_form.hidden_tag() }}
             {{ export_form.export(class="btn btn-export") }}

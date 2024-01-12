@@ -83,3 +83,11 @@ class MakePairsForm(FlaskForm):
 
 class ExportForm(FlaskForm):
     export = SubmitField("Export data as .csv")
+
+
+class KickoffForm(FlaskForm):
+    send_kickoff = SubmitField("Send Kickoff Email to All Users")
+
+
+class ReminderForm(FlaskForm):
+    send_reminder = SubmitField("Send Reminder Email\nto any Users with no Wishes")

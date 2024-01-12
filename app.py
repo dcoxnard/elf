@@ -9,7 +9,8 @@ from flask_login import LoginManager, current_user, login_user, logout_user, \
     login_required
 
 from forms import LoginForm, WishesForm, SetOwnPasswordForm, \
-    AccountRecoveryRequestForm, AccountRecoveryForm, MakePairsForm, ExportForm
+    AccountRecoveryRequestForm, AccountRecoveryForm, MakePairsForm, ExportForm, \
+    KickoffForm, ReminderForm
 from round import Round
 from app_token import secret_key, validate_token
 import elf_logger
@@ -223,10 +224,13 @@ def round_status():
 
     pairs_form = MakePairsForm()
     export_form = ExportForm()
+    kickoff_form = KickoffForm()
+    reminder_form = ReminderForm()
 
     return render_template("round_status.html", status_data=status_data,
                            communications=communications, pairs_set=pairs_set,
                            pairs_form=pairs_form, export_form=export_form,
+                           kickoff_form=kickoff_form, reminder_form=reminder_form,
                            user=current_user, active_tab="admin")
 
 
@@ -250,6 +254,18 @@ def kickoff():
     sent_emails = current_round.send_all_kickoff_email()
     for email in sent_emails:
         logger.info(f"Sent kickoff email to {email}")
+    return redirect(url_for("round_status"))
+
+
+@app.route("/reminder")
+@login_required
+def reminder():
+    if not current_user.is_admin:
+        return redirect(url_for("login"))
+
+    sent_emails = current_round.send_all_reminder_email()
+    for email in sent_emails:
+        logger.info(f"Sent reminder email to {email}")
     return redirect(url_for("round_status"))
 
 
