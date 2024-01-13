@@ -66,6 +66,42 @@ class TestMakeParis(unittest.TestCase):
                 "CD": "AA",
                 "DA": "BA"
             }
+        },
+        # AC and BC are new
+        "new_joiners": {
+            "items": ["AA", "AB", "AC", "BA", "BB", "BC"],
+            "partition": {
+                "AA": "A",
+                "AB": "A",
+                "AC": "A",
+                "BA": "B",
+                "BB": "B",
+                "BC": "B",
+            },
+            "not_allowed_map": {
+                "AA": "BA",
+                "AB": "BB",
+                "AC": None,
+                "BA": "AB",
+                "BB": "AA",
+                "BC": None
+            }
+        },
+        # AC and BC have left
+        "leavers": {
+            "items": ["AA", "AB", "BA", "BB"],
+            "partition": {
+                "AA": "A",
+                "AB": "A",
+                "BA": "B",
+                "BB": "B",
+            },
+            "not_allowed_map": {
+                "AA": "BC",
+                "AB": "BB",
+                "BA": "AC",
+                "BB": "AB",
+            }
         }
     }
 
