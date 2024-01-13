@@ -55,4 +55,4 @@ print(result)
 - Uncoupled user-loader that can be reused by eg flask-login, wtform pw validation, etc.
 - change sample_users schema to align with the `export` method
 - unit tests for cases where people have been added/removed
-- Should send-reminder-email button get disabled?
+- Should send-kickoff-email button get disabled?

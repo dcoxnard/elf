@@ -199,6 +199,7 @@ class Round:
                                   detail)
 
     def send_all_reminder_email(self):
+        sent_emails = []
         with Session(self.engine) as session:
             users = (session
                      .query(User)
@@ -209,6 +210,8 @@ class Round:
                 name = user.name
                 email = user.email
                 self.send_reminder_email(name, email)
+                sent_emails.append(email)
+        return sent_emails
 
     def send_recovery_email(self, user_email):
         url = "localhost:5000"
