@@ -41,9 +41,15 @@
         </form>
     </div>
     <div>
+
+        {% set kickoffs_sent = kickoff_sent_timestamp is not none %}
+        {% if kickoffs_sent %}
+            <p class="alert alert-info">Kickoff email sent at {{ kickoff_sent_timestamp }}</p>
+        {% endif %}
+
         <form action="/kickoff" method="get" novalidate>
             {{ kickoff_form.hidden_tag() }}
-            {{ kickoff_form.send_kickoff(class="btn btn-send-kickoff") }}
+            {{ kickoff_form.send_kickoff(class="btn btn-send-kickoff", disabled=kickoffs_sent) }}
         </form>
     </div>
     <div>

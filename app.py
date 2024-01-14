@@ -12,6 +12,7 @@ from forms import LoginForm, WishesForm, SetOwnPasswordForm, \
     AccountRecoveryRequestForm, AccountRecoveryForm, MakePairsForm, ExportForm, \
     KickoffForm, ReminderForm
 from round import Round
+from models import CommunicationKind
 from app_token import secret_key, validate_token
 import elf_logger
 
@@ -211,6 +212,16 @@ def round_status():
 
     status_data = current_round.status()
     communications = current_round.communications()
+
+    # Return an arb timestamp if *any* kickoff email has been sent.
+    # Return None otherwise
+    i = 0
+    kickoff_sent_timestamp = None
+    while i < len(communications) and kickoff_sent_timestamp is None:
+        comm = communications[i]
+        if comm["kind"] == CommunicationKind.KICKOFF:
+            kickoff_sent_timestamp = comm["timestamp"]
+
     n_pairs_set = sum([data["recipient_set"] for data in status_data.values()])
     n_users = len(status_data)
     if n_pairs_set != n_users and n_pairs_set != 0:
@@ -231,7 +242,8 @@ def round_status():
                            communications=communications, pairs_set=pairs_set,
                            pairs_form=pairs_form, export_form=export_form,
                            kickoff_form=kickoff_form, reminder_form=reminder_form,
-                           user=current_user, active_tab="admin")
+                           user=current_user, active_tab="admin",
+                           kickoff_sent_timestamp=kickoff_sent_timestamp)
 
 
 @app.route("/pairs")
