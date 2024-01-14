@@ -34,13 +34,13 @@
 
 <div class="admin-actions">
     <h1>Admin Actions</h1>
-    <div>
+    <div class="btn-container">
         <form action="/pairs" method="get" novalidate>
             {{ pairs_form.hidden_tag() }}
             {{ pairs_form.make_pairs(class="btn btn-make-pairs", disabled=pairs_set) }}
         </form>
     </div>
-    <div>
+    <div class="btn-container">
 
         {% set kickoffs_sent = kickoff_sent_timestamp is not none %}
         {% if kickoffs_sent %}
@@ -52,13 +52,13 @@
             {{ kickoff_form.send_kickoff(class="btn btn-send-kickoff", disabled=kickoffs_sent) }}
         </form>
     </div>
-    <div>
+    <div class="btn-container">
         <form action="/reminder" method="get" novalidate>
             {{ reminder_form.hidden_tag() }}
             {{ reminder_form.send_reminder(class="btn btn-send-reminder") }}
         </form>
     </div>
-    <div>
+    <div class="btn-container">
         <form action="/export" method="get" novalidate>
             {{ export_form.hidden_tag() }}
             {{ export_form.export(class="btn btn-export") }}
