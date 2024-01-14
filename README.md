@@ -54,4 +54,3 @@ print(result)
 - Upload image
 - Uncoupled user-loader that can be reused by eg flask-login, wtform pw validation, etc.
 - change sample_users schema to align with the `export` method
-- Should send-kickoff-email button get disabled?
