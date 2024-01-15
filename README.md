@@ -54,3 +54,12 @@ print(result)
 - Upload image
 - Uncoupled user-loader that can be reused by eg flask-login, wtform pw validation, etc.
 - change sample_users schema to align with the `export` method
+
+## Deployment
+- git pull from ec2 inst
+- install conda in necessary
+- install git if necessary
+- source regen_env.sh
+- source run_app.sh (separate)
+- source remove_env_vars.sh (separate)
+- 
