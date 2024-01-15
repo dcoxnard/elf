@@ -25,17 +25,16 @@ login_manager.login_view = "login"
 
 logger = elf_logger.logger
 
-# TODO: This should live in a session
 current_round = Round()
-if not current_round.has_users():
-    initialize_file = os.environ["APP_INITIALIZE_FILE"]
-    logger.info(f"Registering users from {initialize_file}")
-    with open(initialize_file, "r") as f_obj:
-        reader = csv.reader(f_obj)
-        rows = [row for row in reader]
-    header, users = rows[0], rows[1:]
-    n_registered = current_round.register_users(users)
-    logger.info(f"Registered {n_registered} users")
+# if not current_round.has_users():
+#     initialize_file = os.environ["APP_INITIALIZE_FILE"]
+#     logger.info(f"Registering users from {initialize_file}")
+#     with open(initialize_file, "r") as f_obj:
+#         reader = csv.reader(f_obj)
+#         rows = [row for row in reader]
+#     header, users = rows[0], rows[1:]
+#     n_registered = current_round.register_users(users)
+#     logger.info(f"Registered {n_registered} users")
 
 
 @login_manager.user_loader
